@@ -1,0 +1,2093 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Personal Nourishment Assessment — ALKA</title>
+<link href="https://api.fontshare.com/v2/css?f[]=chillax@300,400,500,600,700&f[]=synonym@300,400,500,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5F0E8;
+    --warm-white: #FAF7F2;
+    --earth: #2C2416;
+    --moss: #4A5240;
+    --clay: #B5856A;
+    --terracotta: #C4714A;
+    --ochre: #D4A853;
+    --sage: #8A9E7E;
+    --bone: #E8DFD0;
+    --rust: #9B4E2E;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    background: var(--earth);
+    color: var(--earth);
+    font-family: 'Synonym', Georgia, serif;
+    font-size: 16px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* SHELL */
+  .shell { min-height: 100vh; display: grid; grid-template-rows: auto 1fr; }
+
+  /* HEADER */
+  .header {
+    background: var(--earth);
+    padding: 24px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-logo {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 700;
+    font-size: 28px;
+    color: var(--terracotta);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+  .header-progress { display: flex; align-items: center; gap: 16px; }
+  .header-step-text {
+    font-family: 'Synonym', serif;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+  }
+  .progress-track {
+    width: 160px; height: 2px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 1px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--terracotta);
+    border-radius: 1px;
+    transition: width 0.5s ease;
+  }
+
+  /* MAIN */
+  .main { background: var(--cream); display: flex; flex-direction: column; }
+
+  /* WELCOME */
+  .welcome {
+    min-height: calc(100vh - 73px);
+    background: var(--earth);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .welcome::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 70% 60% at 80% 20%, rgba(196,113,74,0.18) 0%, transparent 55%),
+      radial-gradient(ellipse 50% 70% at 10% 85%, rgba(138,158,126,0.12) 0%, transparent 55%);
+  }
+  .welcome-inner { max-width: 680px; width: 100%; position: relative; z-index: 1; }
+  .welcome-eyebrow {
+    font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--sage); margin-bottom: 28px; font-family: 'Synonym', serif;
+  }
+  .welcome-title {
+    font-family: 'Chillax', sans-serif;
+    font-weight: 700;
+    font-size: clamp(44px, 7vw, 80px);
+    line-height: 0.95;
+    color: var(--warm-white);
+    letter-spacing: -0.025em;
+    margin-bottom: 32px;
+  }
+  .welcome-title span { color: var(--terracotta); display: block; }
+  .welcome-body {
+    font-size: 17px; font-weight: 300;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.8; margin-bottom: 20px; max-width: 560px;
+  }
+  .welcome-meta { display: flex; gap: 32px; margin-bottom: 48px; margin-top: 32px; }
+  .welcome-meta-item { display: flex; flex-direction: column; gap: 4px; }
+  .welcome-meta-label {
+    font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase;
+    color: rgba(255,255,255,0.3); font-family: 'Synonym', serif;
+  }
+  .welcome-meta-value {
+    font-family: 'Chillax', sans-serif; font-weight: 500;
+    font-size: 16px; color: var(--bone);
+  }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 12px;
+    background: var(--terracotta); color: #fff;
+    font-family: 'Chillax', sans-serif; font-weight: 500;
+    font-size: 15px; letter-spacing: 0.05em;
+    padding: 18px 36px; border: none; border-radius: 3px;
+    cursor: pointer; transition: background 0.2s;
+  }
+  .btn-primary:hover { background: var(--rust); }
+  .btn-primary .arrow { font-size: 18px; }
+
+  /* STEP SCREEN */
+  .step-screen { display: none; min-height: calc(100vh - 73px); background: var(--cream); flex-direction: column; }
+  .step-screen.active { display: flex; }
+
+  .step-header {
+    background: var(--earth); padding: 40px 48px 36px;
+    position: relative; overflow: hidden;
+  }
+  .step-header::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 60% 100% at 100% 50%, rgba(196,113,74,0.08) 0%, transparent 60%);
+  }
+  .step-number {
+    font-family: 'Chillax', sans-serif; font-weight: 700;
+    font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--clay); margin-bottom: 10px; position: relative; z-index: 1;
+  }
+  .step-title {
+    font-family: 'Chillax', sans-serif; font-weight: 700;
+    font-size: clamp(28px, 4vw, 48px);
+    color: var(--warm-white); line-height: 1.05;
+    letter-spacing: -0.02em; position: relative; z-index: 1;
+  }
+  .step-subtitle {
+    margin-top: 10px; font-size: 15px; font-weight: 300;
+    color: rgba(255,255,255,0.5); position: relative; z-index: 1;
+  }
+
+  /* QUESTIONS */
+  .questions {
+    flex: 1; padding: 52px 48px;
+    max-width: 800px; width: 100%; margin: 0 auto;
+  }
+  .question {
+    margin-bottom: 48px;
+    animation: fadeUp 0.4s ease both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .q-label {
+    font-family: 'Chillax', sans-serif; font-weight: 600;
+    font-size: 19px; color: var(--earth); line-height: 1.35; margin-bottom: 6px;
+  }
+  .q-hint { font-size: 13px; font-weight: 300; color: var(--clay); margin-bottom: 18px; line-height: 1.5; }
+  .q-required { color: var(--terracotta); }
+
+  .q-input {
+    width: 100%; background: var(--warm-white);
+    border: 1px solid var(--bone); border-radius: 3px;
+    padding: 14px 18px; font-family: 'Synonym', serif;
+    font-size: 16px; color: var(--earth); outline: none; transition: border-color 0.2s;
+  }
+  .q-input:focus { border-color: var(--clay); }
+  .q-input::placeholder { color: #B8A898; }
+  textarea.q-input { resize: vertical; min-height: 100px; }
+
+  .q-options { display: flex; flex-direction: column; gap: 10px; }
+  .q-option {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 16px 20px; background: var(--warm-white);
+    border: 1px solid var(--bone); border-radius: 3px;
+    cursor: pointer; transition: all 0.15s; user-select: none;
+  }
+  .q-option:hover { border-color: var(--clay); background: var(--cream); }
+  .q-option.selected { border-color: var(--terracotta); background: #FDF5F0; }
+  .q-option input { display: none; }
+  .q-option-indicator {
+    width: 20px; height: 20px; border-radius: 50%;
+    border: 2px solid var(--bone); flex-shrink: 0; margin-top: 2px;
+    transition: all 0.15s; display: flex; align-items: center; justify-content: center;
+  }
+  .q-option.selected .q-option-indicator { border-color: var(--terracotta); background: var(--terracotta); }
+  .q-option.selected .q-option-indicator::after { content: ''; width: 6px; height: 6px; background: #fff; border-radius: 50%; }
+  .q-option-text { font-size: 15px; color: var(--earth); line-height: 1.4; flex: 1; }
+  .q-option-sub { font-size: 12px; font-weight: 300; color: #8A7A68; margin-top: 3px; }
+
+  .q-multi { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .q-multi-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 14px 16px; background: var(--warm-white);
+    border: 1px solid var(--bone); border-radius: 3px;
+    cursor: pointer; transition: all 0.15s; user-select: none;
+  }
+  .q-multi-item:hover { border-color: var(--clay); }
+  .q-multi-item.selected { border-color: var(--terracotta); background: #FDF5F0; }
+  .q-multi-indicator {
+    width: 18px; height: 18px; border-radius: 2px;
+    border: 2px solid var(--bone); flex-shrink: 0; margin-top: 2px;
+    transition: all 0.15s; display: flex; align-items: center; justify-content: center;
+  }
+  .q-multi-item.selected .q-multi-indicator { border-color: var(--terracotta); background: var(--terracotta); }
+  .q-multi-item.selected .q-multi-indicator::after { content: '✓'; font-size: 10px; color: #fff; font-weight: 700; }
+  .q-multi-text { font-size: 14px; color: var(--earth); line-height: 1.35; flex: 1; }
+
+  .q-likert { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  .q-likert-item { display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; user-select: none; }
+  .q-likert-btn {
+    width: 100%; padding: 14px 8px;
+    background: var(--warm-white); border: 1px solid var(--bone); border-radius: 3px;
+    font-family: 'Synonym', serif; font-size: 12px; color: var(--earth);
+    cursor: pointer; transition: all 0.15s; text-align: center; line-height: 1.3;
+  }
+  .q-likert-btn:hover { border-color: var(--clay); }
+  .q-likert-item.selected .q-likert-btn { border-color: var(--terracotta); background: var(--terracotta); color: #fff; }
+
+  .q-number-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .q-number-group label {
+    display: block; font-size: 12px; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--clay); margin-bottom: 8px;
+    font-family: 'Synonym', serif;
+  }
+  .q-divider { height: 1px; background: var(--bone); margin: 16px 0 40px; }
+
+  /* NAV */
+  .step-nav {
+    padding: 32px 48px; border-top: 1px solid var(--bone);
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--warm-white);
+    max-width: 800px; width: 100%; margin: 0 auto;
+    position: sticky; bottom: 0;
+  }
+  .btn-back {
+    background: none; border: 1px solid var(--bone); border-radius: 3px;
+    padding: 14px 28px; font-family: 'Chillax', sans-serif; font-weight: 500;
+    font-size: 14px; color: var(--earth); cursor: pointer; transition: all 0.15s;
+  }
+  .btn-back:hover { border-color: var(--clay); }
+  .btn-next {
+    background: var(--terracotta); border: none; border-radius: 3px;
+    padding: 14px 36px; font-family: 'Chillax', sans-serif; font-weight: 500;
+    font-size: 14px; color: #fff; cursor: pointer; transition: background 0.15s;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .btn-next:hover { background: var(--rust); }
+  .nav-step-label {
+    font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--clay); font-family: 'Synonym', serif;
+  }
+
+  /* CONDITIONAL */
+  .conditional { display: none; }
+  .conditional.visible { display: block; }
+
+  /* LOADING SCREEN */
+  .loading-screen {
+    display: none;
+    min-height: calc(100vh - 73px);
+    background: var(--earth);
+    align-items: center;
+    justify-content: center;
+    padding: 60px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .loading-screen.active { display: flex; }
+  .loading-screen::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 80% at 50% 50%, rgba(196,113,74,0.08) 0%, transparent 70%);
+  }
+  .loading-inner { max-width: 560px; width: 100%; text-align: center; position: relative; z-index: 1; }
+  .loading-logo {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 700; font-size: 40px;
+    color: var(--terracotta); letter-spacing: 0.12em;
+    text-transform: uppercase; margin-bottom: 48px;
+  }
+  .loading-orbs {
+    display: flex; gap: 12px; justify-content: center; margin-bottom: 48px;
+  }
+  .loading-orb {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--terracotta);
+    animation: orbPulse 1.4s ease-in-out infinite;
+  }
+  .loading-orb:nth-child(2) { animation-delay: 0.2s; background: var(--clay); }
+  .loading-orb:nth-child(3) { animation-delay: 0.4s; background: var(--sage); }
+  .loading-orb:nth-child(4) { animation-delay: 0.6s; background: var(--ochre); }
+  .loading-orb:nth-child(5) { animation-delay: 0.8s; background: var(--terracotta); }
+  @keyframes orbPulse {
+    0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+    40% { transform: scale(1); opacity: 1; }
+  }
+  .loading-title {
+    font-family: 'Chillax', sans-serif; font-weight: 600;
+    font-size: clamp(24px, 4vw, 38px);
+    color: var(--warm-white); line-height: 1.2; margin-bottom: 16px;
+  }
+  .loading-subtitle {
+    font-size: 15px; font-weight: 300;
+    color: rgba(255,255,255,0.5); line-height: 1.7;
+  }
+  .loading-steps { margin-top: 40px; display: flex; flex-direction: column; gap: 12px; }
+  .loading-step {
+    display: flex; align-items: center; gap: 14px;
+    font-size: 13px; font-weight: 300;
+    color: rgba(255,255,255,0.3);
+    font-family: 'Synonym', serif;
+    transition: color 0.5s;
+  }
+  .loading-step.active { color: rgba(255,255,255,0.8); }
+  .loading-step-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: rgba(255,255,255,0.15); flex-shrink: 0;
+    transition: background 0.5s;
+  }
+  .loading-step.active .loading-step-dot { background: var(--terracotta); }
+
+  /* BLUEPRINT */
+  #blueprintView { display: none; }
+  #blueprintView.active { display: block; }
+
+  /* Blueprint Cover */
+  .bp-cover {
+    min-height: 100vh;
+    background: var(--earth);
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    padding: 52px;
+    position: relative;
+    overflow: hidden;
+  }
+  .bp-cover::before {
+    content: ''; position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 85% 15%, rgba(196,113,74,0.2) 0%, transparent 55%),
+      radial-gradient(ellipse 60% 80% at 5% 95%, rgba(138,158,126,0.14) 0%, transparent 55%);
+    pointer-events: none;
+  }
+  .bp-orb { position: absolute; border-radius: 50%; filter: blur(80px); pointer-events: none; }
+  .bp-orb-1 { width: 500px; height: 500px; background: rgba(196,113,74,0.1); top: -150px; right: -150px; }
+  .bp-orb-2 { width: 350px; height: 350px; background: rgba(212,168,83,0.07); bottom: 0; left: -100px; }
+  .bp-cover-header { display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 2; }
+  .bp-cover-logo {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 700; font-size: 32px;
+    color: var(--terracotta); letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .bp-cover-tag {
+    font-family: 'Synonym', serif; font-size: 11px;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--clay); border: 1px solid rgba(196,113,74,0.4);
+    border-radius: 2px; padding: 5px 14px;
+  }
+  .bp-cover-center { display: flex; flex-direction: column; justify-content: center; position: relative; z-index: 2; }
+  .bp-cover-eyebrow {
+    font-family: 'Synonym', serif; font-weight: 300;
+    font-size: 12px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--sage); margin-bottom: 24px;
+  }
+  .bp-cover-title {
+    font-family: 'Chillax', sans-serif; font-weight: 700;
+    font-size: clamp(60px, 9vw, 110px); line-height: 0.92;
+    color: var(--warm-white); letter-spacing: -0.025em;
+  }
+  .bp-cover-title .accent { color: var(--terracotta); display: block; }
+  .bp-cover-divider { width: 60px; height: 1px; background: rgba(255,255,255,0.15); margin: 36px 0; }
+  .bp-cover-for {
+    font-family: 'Synonym', serif; font-weight: 300;
+    font-size: 13px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: rgba(255,255,255,0.35); margin-bottom: 10px;
+  }
+  .bp-cover-name {
+    font-family: 'Chillax', sans-serif; font-weight: 500;
+    font-size: clamp(28px, 4vw, 44px); color: var(--bone); line-height: 1.2;
+  }
+  .bp-cover-footer { display: flex; justify-content: space-between; align-items: flex-end; position: relative; z-index: 2; }
+  .bp-cover-footer-text { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.2); font-family: 'Synonym', serif; }
+  .bp-cover-wf { font-family: 'Chillax', sans-serif; font-weight: 700; font-size: 100px; line-height: 1; color: rgba(255,255,255,0.04); letter-spacing: -0.05em; }
+
+  /* Scores Band */
+  .bp-scores-band { background: var(--warm-white); padding: 60px 52px; border-bottom: 1px solid var(--bone); }
+  .bp-scores-inner { max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; }
+  .bp-score-label { font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--clay); margin-bottom: 14px; font-family: 'Synonym', serif; }
+  .bp-score-bar-track { height: 3px; background: var(--bone); border-radius: 2px; margin-bottom: 10px; overflow: hidden; }
+  .bp-score-bar-fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--sage), var(--terracotta)); }
+  .bp-score-value { font-family: 'Chillax', sans-serif; font-weight: 700; font-size: 40px; color: var(--earth); line-height: 1; }
+  .bp-score-desc { font-size: 12px; font-weight: 300; color: #8A7A68; margin-top: 4px; }
+
+  /* Metabolic Band */
+  .bp-metabolic { background: var(--terracotta); padding: 70px 52px; position: relative; overflow: hidden; }
+  .bp-metabolic::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 100% at 100% 50%, rgba(0,0,0,0.15) 0%, transparent 60%); }
+  .bp-metabolic-inner { max-width: 900px; margin: 0 auto; position: relative; z-index: 1; }
+  .bp-metabolic-eyebrow { font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(255,255,255,0.55); margin-bottom: 20px; font-family: 'Synonym', serif; }
+  .bp-metabolic-title { font-family: 'Chillax', sans-serif; font-weight: 700; font-size: clamp(28px, 4vw, 50px); color: #fff; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 28px; max-width: 680px; }
+  .bp-metabolic-intro { font-size: 16px; font-weight: 300; color: rgba(255,255,255,0.8); line-height: 1.75; max-width: 640px; }
+  .bp-metabolic-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 40px; }
+  .bp-metabolic-item { background: rgba(255,255,255,0.1); padding: 30px 26px; }
+  .bp-metabolic-marker { width: 28px; height: 2px; background: rgba(255,255,255,0.4); margin-bottom: 18px; }
+  .bp-metabolic-item-title { font-family: 'Chillax', sans-serif; font-weight: 600; font-size: 16px; color: #fff; margin-bottom: 10px; }
+  .bp-metabolic-item-text { font-size: 13px; font-weight: 300; color: rgba(255,255,255,0.78); line-height: 1.65; }
+
+  /* Archetype */
+  .bp-archetype-wrap { background: var(--cream); padding: 80px 52px; }
+  .bp-archetype-card { max-width: 900px; margin: 0 auto; background: var(--earth); border-radius: 4px; overflow: hidden; display: grid; grid-template-columns: 1fr 1fr; }
+  .bp-archetype-left { padding: 52px; background: var(--rust); position: relative; overflow: hidden; }
+  .bp-archetype-left::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 0% 0%, rgba(255,255,255,0.08) 0%, transparent 60%); }
+  .bp-arch-system-label { font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 14px; font-family: 'Synonym', serif; position: relative; z-index: 1; }
+  .bp-arch-name { font-family: 'Chillax', sans-serif; font-weight: 700; font-size: clamp(38px, 5vw, 62px); color: #fff; line-height: 1; letter-spacing: -0.02em; margin-bottom: 28px; position: relative; z-index: 1; }
+  .bp-arch-tag { display: inline-block; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); border-radius: 3px; padding: 6px 14px; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.8); font-family: 'Synonym', serif; position: relative; z-index: 1; }
+  .bp-archetype-right { padding: 52px; }
+  .bp-arch-framework-label { font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--sage); margin-bottom: 16px; font-family: 'Synonym', serif; }
+  .bp-arch-desc { font-size: 15px; font-weight: 300; color: rgba(255,255,255,0.8); line-height: 1.75; margin-bottom: 24px; }
+
+  /* Pillars */
+  .bp-pillars-section { background: var(--cream); padding: 0 52px 80px; }
+  .bp-pillars { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: var(--bone); max-width: 900px; margin: 0 auto; }
+  .bp-pillar { background: var(--warm-white); padding: 44px 40px; }
+  .bp-pillar-number { font-family: 'Chillax', sans-serif; font-weight: 700; font-size: 56px; color: var(--bone); line-height: 1; margin-bottom: 16px; }
+  .bp-pillar-title { font-family: 'Chillax', sans-serif; font-weight: 600; font-size: 20px; color: var(--earth); margin-bottom: 12px; }
+  .bp-pillar-text { font-size: 15px; font-weight: 300; color: #5A4E3E; line-height: 1.7; }
+
+  /* Vitality */
+  .bp-vitality-band { background: var(--moss); padding: 70px 52px; }
+  .bp-vitality-inner { max-width: 900px; margin: 0 auto; }
+  .bp-vitality-eyebrow { font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 16px; font-family: 'Synonym', serif; }
+  .bp-vitality-title { font-family: 'Chillax', sans-serif; font-weight: 600; font-size: clamp(26px, 3.5vw, 44px); color: var(--warm-white); line-height: 1.15; letter-spacing: -0.01em; margin-bottom: 40px; max-width: 600px; }
+  .bp-vitality-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; }
+  .bp-vitality-item { background: rgba(255,255,255,0.06); padding: 28px 24px; }
+  .bp-vitality-marker { font-family: 'Chillax', sans-serif; font-weight: 700; font-size: 32px; color: var(--ochre); line-height: 1; margin-bottom: 8px; }
+  .bp-vitality-item-title { font-family: 'Chillax', sans-serif; font-weight: 500; font-size: 15px; color: var(--warm-white); margin-bottom: 6px; }
+  .bp-vitality-item-text { font-size: 13px; font-weight: 300; color: rgba(255,255,255,0.6); line-height: 1.6; }
+
+  /* Meal Plan - Full Interactive */
+  .week-band { background: var(--warm-white); padding: 80px 52px; border-top: 2px solid var(--earth); }
+  .week-inner { max-width: 1100px; margin: 0 auto; }
+  .week-title { font-family: 'Chillax', sans-serif; font-weight: 700; font-size: clamp(36px, 5vw, 64px); line-height: 1; letter-spacing: -0.025em; color: var(--earth); margin-bottom: 12px; }
+  .week-subtitle { font-size: 17px; font-weight: 300; color: #6A5A48; margin-bottom: 40px; max-width: 580px; line-height: 1.7; }
+  .section-label-mp { font-family: 'Synonym', serif; font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--clay); display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .section-label-mp::after { content: ''; width: 40px; height: 1px; background: var(--bone); }
+  .day-tabs { display: flex; gap: 2px; margin-bottom: 2px; }
+  .day-tab { flex: 1; background: var(--bone); border: none; padding: 16px 8px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; transition: background 0.15s; }
+  .day-tab:hover { background: #D8D0C0; }
+  .day-tab.active { background: var(--earth); }
+  .tab-day { font-family: 'Chillax', sans-serif; font-weight: 600; font-size: 14px; color: var(--earth); letter-spacing: 0.04em; }
+  .tab-theme { font-family: 'Synonym', serif; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: #9A8A78; }
+  .day-tab.active .tab-day { color: var(--ochre); }
+  .day-tab.active .tab-theme { color: rgba(255,255,255,0.35); }
+  .day-panel { display: none; }
+  .day-panel.active { display: block; animation: fadeUp 0.3s ease; }
+  .day-panel-header { background: var(--earth); padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px; }
+  .day-panel-name { font-family: 'Chillax', sans-serif; font-weight: 600; font-size: 20px; color: var(--warm-white); }
+  .day-panel-context { font-family: 'Synonym', serif; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.35); }
+  .meal-cards { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; background: var(--bone); }
+  .meal-card { background: var(--cream); padding: 24px 20px; cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; gap: 8px; position: relative; }
+  .meal-card:hover { background: #EDE7DB; transform: translateY(-2px); box-shadow: 0 4px 20px rgba(44,36,22,0.1); z-index: 1; }
+  .meal-card::after { content: 'View Recipe →'; position: absolute; bottom: 16px; right: 16px; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--clay); opacity: 0; transition: opacity 0.2s; font-family: 'Synonym', serif; }
+  .meal-card:hover::after { opacity: 1; }
+  .meal-card-rest { background: #F0EBE0; cursor: pointer; }
+  .meal-card-rest:hover { background: #E8E0D2; }
+  .meal-card-prep { background: #EBF0E8; cursor: pointer; }
+  .meal-card-prep:hover { background: #E0E8DC; }
+  .meal-card-slot { font-family: 'Synonym', serif; font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--sage); }
+  .meal-card-name { font-family: 'Chillax', sans-serif; font-weight: 600; font-size: 14px; color: var(--earth); line-height: 1.3; }
+  .meal-card-rest .meal-card-name { color: #9A8A78; }
+  .meal-card-desc { font-size: 11px; font-weight: 300; color: #8A7A68; line-height: 1.45; flex: 1; }
+  .meal-card-macros { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+  .meal-card-macros span { font-family: 'Synonym', serif; font-size: 10px; color: var(--terracotta); background: rgba(196,113,74,0.08); padding: 2px 6px; border-radius: 2px; }
+  .rest-macros span { color: #9A8A78; background: rgba(154,138,120,0.1); }
+  .day-total { background: var(--earth); padding: 16px 24px; font-size: 13px; font-weight: 300; color: rgba(255,255,255,0.6); margin-top: 2px; }
+  .day-total strong { color: var(--ochre); font-weight: 600; }
+  .shopping-btn { display: block; margin: 32px 0 0; padding: 16px 32px; background: var(--moss); color: #fff; border: none; border-radius: 3px; font-family: 'Chillax', sans-serif; font-weight: 500; font-size: 14px; letter-spacing: 0.06em; cursor: pointer; transition: background 0.15s; }
+  .shopping-btn:hover { background: #3A4230; }
+
+  /* Recipe Modal */
+  .recipe-modal-overlay { position: fixed; inset: 0; background: rgba(20,15,8,0.85); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 24px; backdrop-filter: blur(4px); }
+  .recipe-modal-overlay.open { display: flex; animation: fadeIn 0.25s ease; }
+  .recipe-modal { background: var(--warm-white); max-width: 680px; width: 100%; max-height: 90vh; overflow-y: auto; border-radius: 4px; position: relative; animation: slideUp 0.3s ease; }
+  .recipe-close { position: sticky; top: 0; float: right; margin: 16px 16px 0 0; background: var(--earth); border: none; color: rgba(255,255,255,0.6); width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 12px; z-index: 10; transition: all 0.15s; }
+  .recipe-close:hover { background: var(--terracotta); color: #fff; }
+  .recipe-modal-inner { padding: 36px 40px 44px; }
+  .rc-header { margin-bottom: 28px; }
+  .rc-slot { font-family: 'Synonym', serif; font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--clay); margin-bottom: 8px; }
+  .rc-name { font-family: 'Chillax', sans-serif; font-weight: 700; font-size: 32px; color: var(--earth); line-height: 1.1; margin-bottom: 12px; }
+  .rc-meta { display: flex; gap: 24px; }
+  .rc-meta-item { font-size: 13px; color: #6A5A48; }
+  .rc-meta-item strong { color: var(--terracotta); }
+  .rc-macros-bar { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; margin: 24px 0; background: var(--bone); }
+  .rc-macro { background: var(--earth); padding: 14px 12px; text-align: center; }
+  .rc-macro-val { font-family: 'Chillax', sans-serif; font-weight: 700; font-size: 22px; color: var(--ochre); line-height: 1; }
+  .rc-macro-label { font-family: 'Synonym', serif; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-top: 4px; }
+  .rc-section-label { font-family: 'Synonym', serif; font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--clay); margin: 28px 0 14px; display: flex; align-items: center; gap: 12px; }
+  .rc-section-label::after { content: ''; flex: 1; height: 1px; background: var(--bone); }
+  .rc-ingredients { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: var(--bone); }
+  .rc-ingredient { background: var(--cream); padding: 11px 14px; display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .rc-ingredient-name { font-size: 13px; color: var(--earth); font-weight: 400; }
+  .rc-ingredient-amount { font-family: 'Chillax', sans-serif; font-weight: 600; font-size: 13px; color: var(--terracotta); white-space: nowrap; }
+  .rc-method { display: flex; flex-direction: column; gap: 20px; }
+  .rc-step { display: flex; gap: 16px; align-items: flex-start; }
+  .rc-step-num { font-family: 'Chillax', sans-serif; font-weight: 700; font-size: 24px; color: var(--bone); line-height: 1; flex-shrink: 0; width: 28px; }
+  .rc-step-text { font-size: 14px; font-weight: 300; color: #5A4E3E; line-height: 1.65; padding-top: 4px; }
+  .rc-note { margin-top: 24px; padding: 14px 18px; background: rgba(138,158,126,0.1); border-left: 2px solid var(--sage); font-size: 13px; font-weight: 300; color: #5A4E3E; line-height: 1.6; font-style: italic; }
+
+  /* Shopping Overlay */
+  .shopping-overlay { position: fixed; inset: 0; background: rgba(20,15,8,0.7); z-index: 1000; display: none; justify-content: flex-end; backdrop-filter: blur(2px); }
+  .shopping-overlay.open { display: flex; animation: fadeIn 0.2s ease; }
+  .shopping-panel { width: 440px; max-width: 100vw; background: var(--warm-white); height: 100%; overflow-y: auto; animation: slideInRight 0.3s ease; }
+  .shopping-panel-header { background: var(--earth); padding: 28px 32px 24px; position: sticky; top: 0; z-index: 10; }
+  .shopping-panel-title { font-family: 'Chillax', sans-serif; font-weight: 700; font-size: 24px; color: var(--warm-white); margin-bottom: 4px; }
+  .shopping-panel-sub { font-family: 'Synonym', serif; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.35); }
+  .shopping-panel-actions { display: flex; gap: 12px; margin-top: 16px; }
+  .shopping-print-btn { background: var(--terracotta); color: #fff; border: none; border-radius: 3px; padding: 8px 16px; font-family: 'Chillax', sans-serif; font-size: 12px; cursor: pointer; }
+  .shopping-close-btn { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.6); border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-size: 12px; margin-left: auto; }
+  .shopping-body { padding: 24px 32px 48px; }
+  .shopping-category { margin-bottom: 32px; }
+  .shopping-category-title { font-family: 'Chillax', sans-serif; font-weight: 600; font-size: 16px; color: var(--earth); margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid var(--bone); }
+  .shopping-item { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--bone); }
+  .shopping-check { width: 18px; height: 18px; border: 2px solid var(--bone); border-radius: 3px; flex-shrink: 0; cursor: pointer; transition: all 0.15s; }
+  .shopping-check.checked { background: var(--sage); border-color: var(--sage); }
+  .shopping-item-name { font-size: 14px; color: var(--earth); flex: 1; }
+  .shopping-item-qty { font-family: 'Synonym', serif; font-size: 11px; color: var(--terracotta); letter-spacing: 0.05em; text-align: right; }
+
+  @keyframes slideInRight { from { transform: translateX(100%); } to { transform: translateX(0); } }
+  @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  /* Action bar */
+  .bp-action-bar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: rgba(44,36,22,0.95); backdrop-filter: blur(12px);
+    padding: 20px 52px; display: flex; align-items: center; justify-content: space-between;
+    border-top: 1px solid rgba(255,255,255,0.08); z-index: 200;
+  }
+  .bp-action-bar-text { font-size: 13px; font-weight: 300; color: rgba(255,255,255,0.4); font-family: 'Synonym', serif; }
+  .bp-action-btns { display: flex; gap: 12px; }
+  .btn-pdf { background: var(--terracotta); color: #fff; border: none; border-radius: 3px; padding: 12px 24px; font-family: 'Chillax', sans-serif; font-weight: 500; font-size: 13px; cursor: pointer; }
+  .btn-restart { background: none; border: 1px solid rgba(255,255,255,0.2); border-radius: 3px; padding: 12px 24px; font-family: 'Chillax', sans-serif; font-weight: 500; font-size: 13px; color: rgba(255,255,255,0.6); cursor: pointer; }
+
+  @media print {
+    .bp-action-bar { display: none; }
+    #blueprintView { padding-bottom: 0; }
+  }
+
+  @media (max-width: 640px) {
+    .header { padding: 20px 24px; }
+    .step-header, .questions, .step-nav { padding-left: 24px; padding-right: 24px; }
+    .q-multi { grid-template-columns: 1fr; }
+    .q-number-row { grid-template-columns: 1fr; }
+    .q-likert { grid-template-columns: repeat(5,1fr); }
+    .q-likert-btn { padding: 10px 4px; font-size: 11px; }
+    .welcome { padding: 40px 24px; }
+    .welcome-meta { flex-wrap: wrap; gap: 20px; }
+    .bp-cover, .bp-scores-band, .bp-metabolic, .bp-archetype-wrap, .bp-pillars-section, .bp-vitality-band, .week-band { padding-left: 24px; padding-right: 24px; }
+    .bp-archetype-card { grid-template-columns: 1fr; }
+    .bp-scores-inner { grid-template-columns: repeat(2,1fr); }
+    .bp-metabolic-grid { grid-template-columns: 1fr; }
+    .bp-pillars { grid-template-columns: 1fr; }
+    .bp-vitality-grid { grid-template-columns: 1fr; }
+    .week-band { padding: 48px 24px; }
+    .day-tabs { overflow-x: auto; }
+    .day-tab { min-width: 80px; }
+    .meal-cards { grid-template-columns: 1fr 1fr; }
+    .rc-ingredients { grid-template-columns: 1fr; }
+    .rc-macros-bar { grid-template-columns: repeat(5, 1fr); }
+    .rc-macro-val { font-size: 16px; }
+    .day-panel-header { flex-direction: column; align-items: flex-start; gap: 4px; }
+    .shopping-panel { width: 100vw; }
+    .bp-action-bar { padding: 16px 24px; }
+  }
+  #saveIndicator.visible { opacity: 1; }
+</style>
+</head>
+<body>
+
+<div class="shell" id="appShell">
+
+  <!-- HEADER -->
+  <header class="header" id="header">
+    <a class="header-logo" href="#">ALKA</a>
+    <div class="header-progress" id="headerProgress" style="display:none">
+      <span class="header-step-text" id="headerStepText">Step 1 of 8</span>
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill" style="width:12.5%"></div>
+      </div>
+    </div>
+  </header>
+
+  <div class="main" id="mainContent">
+
+    <!-- RESUME BANNER -->
+    <div id="resumeBanner" style="display:none; position:fixed; top:0; left:0; right:0; z-index:500; background:var(--earth); padding:16px 24px; align-items:center; justify-content:space-between; gap:16px; box-shadow:0 4px 24px rgba(0,0,0,0.3);">
+      <div style="display:flex; align-items:center; gap:14px;">
+        <div style="width:8px;height:8px;border-radius:50%;background:var(--ochre);flex-shrink:0;"></div>
+        <div>
+          <div style="font-family:'Chillax',sans-serif;font-weight:600;font-size:14px;color:var(--warm-white);">Continue where you left off</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.45);margin-top:2px;">Saved <span id="resumeTime"></span></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;flex-shrink:0;">
+        <button id="resumeBtn" style="background:var(--ochre);color:var(--earth);border:none;border-radius:3px;padding:10px 20px;font-family:'Chillax',sans-serif;font-weight:600;font-size:13px;cursor:pointer;">Resume</button>
+        <button id="resumeDismissBtn" style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);border:none;border-radius:3px;padding:10px 16px;font-family:'Chillax',sans-serif;font-size:12px;cursor:pointer;">Start fresh</button>
+      </div>
+    </div>
+
+    <!-- SAVE INDICATOR -->
+    <div id="saveIndicator" style="position:fixed;bottom:24px;right:24px;z-index:400;background:var(--earth);color:rgba(255,255,255,0.7);padding:10px 16px;border-radius:3px;font-size:12px;font-family:'Synonym',serif;letter-spacing:0.1em;opacity:0;transition:opacity 0.3s;pointer-events:none;">
+      ✓ &nbsp;Progress saved
+    </div>
+
+    <!-- WELCOME -->
+    <div class="welcome" id="welcomeScreen">
+      <div class="welcome-inner">
+        <p class="welcome-eyebrow">Personal Nourishment Test</p>
+        <h1 class="welcome-title">
+          Know Your
+          <span>Body.</span>
+        </h1>
+        <p class="welcome-body">
+          This test maps your unique biology, heritage, metabolism, and life to create a nourishment blueprint that is entirely yours. Food wisdom built around who you actually are.
+        </p>
+        <div class="welcome-meta">
+          <div class="welcome-meta-item">
+            <span class="welcome-meta-label">Questions</span>
+            <span class="welcome-meta-value">50+</span>
+          </div>
+          <div class="welcome-meta-item">
+            <span class="welcome-meta-label">Time</span>
+            <span class="welcome-meta-value">10–12 min</span>
+          </div>
+          <div class="welcome-meta-item">
+            <span class="welcome-meta-label">Steps</span>
+            <span class="welcome-meta-value">8</span>
+          </div>
+          <div class="welcome-meta-item">
+            <span class="welcome-meta-label">Result</span>
+            <span class="welcome-meta-value">Your Blueprint</span>
+          </div>
+        </div>
+        <button class="btn-primary" onclick="startAssessment()">
+          Begin Your Test <span class="arrow">&#8594;</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- STEP 1 -->
+    <div class="step-screen" id="step1">
+      <div class="step-header">
+        <div class="step-number">Step 1 of 8</div>
+        <h2 class="step-title">Getting to<br>Know You</h2>
+        <p class="step-subtitle">The foundation of your blueprint begins here.</p>
+      </div>
+      <div class="questions">
+        <div class="question">
+          <div class="q-label">Your first name <span class="q-required">*</span></div>
+          <input type="text" class="q-input" id="q_name" placeholder="Sofia">
+        </div>
+        <div class="question">
+          <div class="q-label">Your email <span class="q-required">*</span></div>
+          <div class="q-hint">Your blueprint will be sent here.</div>
+          <input type="email" class="q-input" id="q_email" placeholder="sofia@example.com">
+        </div>
+        <div class="question">
+          <div class="q-label">Age</div>
+          <input type="number" class="q-input" id="q_age" placeholder="44" min="18" max="99" style="max-width:160px">
+        </div>
+        <div class="question">
+          <div class="q-label">Biological sex</div>
+          <div class="q-hint">Relevant for hormonal context, iron needs, and metabolic recommendations.</div>
+          <div class="q-options" id="q_sex">
+            <label class="q-option"><input type="radio" name="sex" value="female"><div class="q-option-indicator"></div><span class="q-option-text">Female</span></label>
+            <label class="q-option"><input type="radio" name="sex" value="male"><div class="q-option-indicator"></div><span class="q-option-text">Male</span></label>
+            <label class="q-option"><input type="radio" name="sex" value="nonbinary"><div class="q-option-indicator"></div><span class="q-option-text">Non-binary</span></label>
+            <label class="q-option"><input type="radio" name="sex" value="prefer_not"><div class="q-option-indicator"></div><span class="q-option-text">Prefer not to say</span></label>
+          </div>
+        </div>
+        <div class="question" id="q_hormonal_context_wrap" style="display:none">
+          <div class="q-label">Hormonal context</div>
+          <div class="q-hint">This helps us personalize recommendations around energy, recovery, and body composition after 40.</div>
+          <div class="q-options" id="q_hormonal_female" style="display:none; flex-direction:column; gap:10px">
+            <label class="q-option"><input type="radio" name="hormonal" value="regular_cycle"><div class="q-option-indicator"></div><span class="q-option-text">Regular menstrual cycle</span></label>
+            <label class="q-option"><input type="radio" name="hormonal" value="perimenopause"><div class="q-option-indicator"></div><span class="q-option-text">Perimenopause</span></label>
+            <label class="q-option"><input type="radio" name="hormonal" value="menopause"><div class="q-option-indicator"></div><span class="q-option-text">Post-menopause</span></label>
+            <label class="q-option"><input type="radio" name="hormonal" value="hormonal_bc"><div class="q-option-indicator"></div><span class="q-option-text">Hormonal birth control</span></label>
+            <label class="q-option"><input type="radio" name="hormonal" value="hrt_f"><div class="q-option-indicator"></div><span class="q-option-text">Hormone replacement therapy</span></label>
+            <label class="q-option"><input type="radio" name="hormonal" value="no_changes_f"><div class="q-option-indicator"></div><span class="q-option-text">No notable hormonal changes</span></label>
+            <label class="q-option"><input type="radio" name="hormonal" value="unsure_f"><div class="q-option-indicator"></div><span class="q-option-text">Unsure</span></label>
+          </div>
+          <div class="q-options" id="q_hormonal_male" style="display:none; flex-direction:column; gap:10px">
+            <label class="q-option"><input type="radio" name="hormonal" value="testosterone_optimal"><div class="q-option-indicator"></div><span class="q-option-text">Testosterone feels optimal — strong drive and recovery</span></label>
+            <label class="q-option"><input type="radio" name="hormonal" value="testosterone_declining"><div class="q-option-indicator"></div><span class="q-option-text">Noticing lower drive, energy, or recovery than before</span></label>
+            <label class="q-option"><input type="radio" name="hormonal" value="trt"><div class="q-option-indicator"></div><span class="q-option-text">Currently on testosterone replacement therapy</span></label>
+            <label class="q-option"><input type="radio" name="hormonal" value="hrt_m"><div class="q-option-indicator"></div><span class="q-option-text">Other hormone therapy</span></label>
+            <label class="q-option"><input type="radio" name="hormonal" value="no_changes_m"><div class="q-option-indicator"></div><span class="q-option-text">No notable hormonal changes</span></label>
+            <label class="q-option"><input type="radio" name="hormonal" value="unsure_m"><div class="q-option-indicator"></div><span class="q-option-text">Unsure</span></label>
+          </div>
+          <div class="q-options" id="q_hormonal_other" style="display:none; flex-direction:column; gap:10px">
+            <label class="q-option"><input type="radio" name="hormonal" value="hrt_other"><div class="q-option-indicator"></div><span class="q-option-text">Hormone replacement therapy</span></label>
+            <label class="q-option"><input type="radio" name="hormonal" value="no_changes_o"><div class="q-option-indicator"></div><span class="q-option-text">No notable hormonal changes</span></label>
+            <label class="q-option"><input type="radio" name="hormonal" value="prefer_not_hormonal"><div class="q-option-indicator"></div><span class="q-option-text">Prefer not to say</span></label>
+            <label class="q-option"><input type="radio" name="hormonal" value="unsure_o"><div class="q-option-indicator"></div><span class="q-option-text">Unsure</span></label>
+          </div>
+        </div>
+        <div class="question">
+          <div class="q-label">Height & Weight</div>
+          <div class="q-number-row">
+            <div class="q-number-group"><label>Height</label><input type="text" class="q-input" id="q_height" placeholder="e.g. 5'7&quot; or 170 cm"></div>
+            <div class="q-number-group"><label>Weight</label><input type="text" class="q-input" id="q_weight" placeholder="e.g. 145 lbs or 65 kg"></div>
+          </div>
+        </div>
+        <div class="question">
+          <div class="q-label">Activity level</div>
+          <div class="q-options" id="q_activity">
+            <label class="q-option"><input type="radio" name="activity" value="sedentary"><div class="q-option-indicator"></div><div><div class="q-option-text">Sedentary</div><div class="q-option-sub">Desk work, minimal movement</div></div></label>
+            <label class="q-option"><input type="radio" name="activity" value="lightly_active"><div class="q-option-indicator"></div><div><div class="q-option-text">Lightly Active</div><div class="q-option-sub">1–2 workouts per week, some walking</div></div></label>
+            <label class="q-option"><input type="radio" name="activity" value="moderately_active"><div class="q-option-indicator"></div><div><div class="q-option-text">Moderately Active</div><div class="q-option-sub">3–4 workouts per week</div></div></label>
+            <label class="q-option"><input type="radio" name="activity" value="very_active"><div class="q-option-indicator"></div><div><div class="q-option-text">Very Active</div><div class="q-option-sub">5+ workouts per week, physically demanding job</div></div></label>
+            <label class="q-option"><input type="radio" name="activity" value="athlete"><div class="q-option-indicator"></div><div><div class="q-option-text">Athlete</div><div class="q-option-sub">Training daily, competitive sport</div></div></label>
+          </div>
+        </div>
+        <div class="question">
+          <div class="q-label">Have you had bloodwork or labs in the last 12 months?</div>
+          <div class="q-options" id="q_labs">
+            <label class="q-option"><input type="radio" name="labs" value="yes_have"><div class="q-option-indicator"></div><span class="q-option-text">Yes — I have recent results</span></label>
+            <label class="q-option"><input type="radio" name="labs" value="yes_no_access"><div class="q-option-indicator"></div><span class="q-option-text">Yes — but I don't have them handy</span></label>
+            <label class="q-option"><input type="radio" name="labs" value="no"><div class="q-option-indicator"></div><span class="q-option-text">Not recently</span></label>
+          </div>
+        </div>
+        <div class="question">
+          <div class="q-label">Would you like recommendations for lab or microbiome testing?</div>
+          <div class="q-options" id="q_testing">
+            <label class="q-option"><input type="radio" name="testing" value="yes"><div class="q-option-indicator"></div><span class="q-option-text">Yes — include testing recommendations</span></label>
+            <label class="q-option"><input type="radio" name="testing" value="not_now"><div class="q-option-indicator"></div><span class="q-option-text">Not right now</span></label>
+          </div>
+        </div>
+        <div class="question">
+          <div class="q-label">Where do you live? <span style="font-weight:300;font-size:14px;color:var(--clay)">(City, Country)</span></div>
+          <div class="q-hint">Used for seasonal eating guidance and regional food availability.</div>
+          <input type="text" class="q-input" id="q_location" placeholder="e.g. Los Angeles, USA or Tokyo, Japan">
+        </div>
+      </div>
+      <div class="step-nav">
+        <div></div>
+        <span class="nav-step-label">Step 1 of 8</span>
+        <button class="btn-next" onclick="goToStep(2)">Continue &#8594;</button>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step-screen" id="step2">
+      <div class="step-header">
+        <div class="step-number">Step 2 of 8</div>
+        <h2 class="step-title">Your Goals</h2>
+        <p class="step-subtitle">What does deep nourishment look like for you?</p>
+      </div>
+      <div class="questions">
+        <div class="question">
+          <div class="q-label">What are you here for? <span style="font-weight:300;font-size:14px;color:var(--clay)">Select all that apply</span></div>
+          <div class="q-multi" id="q_goals">
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">More sustained energy</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Gut healing & digestion</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Lean muscle & body composition</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Weight loss</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Weight gain</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Hormonal balance</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Better sleep & recovery</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Reduce inflammation</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Cognitive clarity & focus</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Nervous system regulation</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Immune strength</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Athletic performance & stamina</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Deeper nourishment overall</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Understand food as medicine</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Meal prep skills & confidence</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Other</span></label>
+          </div>
+        </div>
+        <div class="question">
+          <div class="q-label">What would change everything for you?</div>
+          <div class="q-hint">Is it finally waking up with real energy? A gut that works? Knowing exactly what to eat? Describe it in your own words.</div>
+          <textarea class="q-input" id="q_change_everything" placeholder="Tell us in your own words..."></textarea>
+        </div>
+        <div class="question">
+          <div class="q-label">What approaches have you tried before, and what happened?</div>
+          <div class="q-hint">Keto, vegan, macro tracking, carnivore, intuitive eating — what worked, what didn't, what felt unsustainable.</div>
+          <textarea class="q-input" id="q_previous_approaches" placeholder="e.g. I tried keto for 3 months and lost energy..."></textarea>
+        </div>
+      </div>
+      <div class="step-nav">
+        <button class="btn-back" onclick="goToStep(1)">&#8592; Back</button>
+        <span class="nav-step-label">Step 2 of 8</span>
+        <button class="btn-next" onclick="goToStep(3)">Continue &#8594;</button>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step-screen" id="step3">
+      <div class="step-header">
+        <div class="step-number">Step 3 of 8</div>
+        <h2 class="step-title">Food &<br>Medicine</h2>
+        <p class="step-subtitle">Your heritage, your choices, your relationship with food.</p>
+      </div>
+      <div class="questions">
+        <div class="question">
+          <div class="q-label">What is your cultural or heritage background?</div>
+          <div class="q-hint">This helps us draw from your ancestral food wisdom and flavor vocabulary. TCK or multicultural? Describe your full story.</div>
+          <input type="text" class="q-input" id="q_heritage" placeholder="e.g. Mexican & Japanese, or grew up between Brazil and Germany">
+        </div>
+        <div class="question">
+          <div class="q-label">Which cuisines feel like home to you? <span style="font-weight:300;font-size:14px;color:var(--clay)">Select all that apply</span></div>
+          <div class="q-multi" id="q_cuisines">
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Mexican</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Japanese</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Mediterranean</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Chinese</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Indian</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Middle Eastern</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">West African</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">French</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Italian</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Korean</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Latin American</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Southeast Asian</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Ethiopian / East African</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">American</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Eastern European</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Other</span></label>
+          </div>
+        </div>
+        <div class="question">
+          <div class="q-label">How do you eat? <span style="font-weight:300;font-size:14px;color:var(--clay)">Select all that apply</span></div>
+          <div class="q-multi" id="q_diet">
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Omnivore</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Pescatarian</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Vegetarian</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Lacto-ovo vegetarian</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Vegan</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Raw vegan</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Pollotarian</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Carnivore</span></label>
+          </div>
+        </div>
+        <div class="question">
+          <div class="q-label">Any food intolerances?</div>
+          <input type="text" class="q-input" id="q_intolerances" placeholder="e.g. lactose, gluten, FODMAP, histamine">
+        </div>
+        <div class="question">
+          <div class="q-label">Any food allergies?</div>
+          <input type="text" class="q-input" id="q_allergies" placeholder="e.g. tree nuts, shellfish, soy">
+        </div>
+        <div class="question">
+          <div class="q-label">Are you currently taking any medications?</div>
+          <div class="q-options" id="q_meds">
+            <label class="q-option"><input type="radio" name="meds" value="yes"><div class="q-option-indicator"></div><span class="q-option-text">Yes</span></label>
+            <label class="q-option"><input type="radio" name="meds" value="no"><div class="q-option-indicator"></div><span class="q-option-text">No</span></label>
+          </div>
+        </div>
+        <div class="question">
+          <div class="q-label">Do you take any supplements or adaptogens?</div>
+          <div class="q-options" id="q_supps">
+            <label class="q-option" onclick="toggleConditional('q_supps_detail')"><input type="radio" name="supps" value="yes"><div class="q-option-indicator"></div><span class="q-option-text">Yes</span></label>
+            <label class="q-option" onclick="hideConditional('q_supps_detail')"><input type="radio" name="supps" value="no"><div class="q-option-indicator"></div><span class="q-option-text">No</span></label>
+          </div>
+          <div id="q_supps_detail" class="conditional" style="margin-top:16px">
+            <div class="q-hint">Which ones and what for?</div>
+            <textarea class="q-input" id="q_supps_list" placeholder="e.g. magnesium for sleep, vitamin D3, lion's mane for focus..."></textarea>
+          </div>
+        </div>
+        <div class="question">
+          <div class="q-label">Alcohol and caffeine</div>
+          <div class="q-hint">How often, what forms, and how does your body respond?</div>
+          <textarea class="q-input" id="q_alcohol_caffeine" placeholder="e.g. 1-2 glasses of wine on weekends, 1-2 coffees daily — coffee makes me anxious if I have it before eating"></textarea>
+        </div>
+      </div>
+      <div class="step-nav">
+        <button class="btn-back" onclick="goToStep(2)">&#8592; Back</button>
+        <span class="nav-step-label">Step 3 of 8</span>
+        <button class="btn-next" onclick="goToStep(4)">Continue &#8594;</button>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step-screen" id="step4">
+      <div class="step-header">
+        <div class="step-number">Step 4 of 8</div>
+        <h2 class="step-title">Your Kitchen<br>Reality</h2>
+        <p class="step-subtitle">Great nourishment lives within real life constraints.</p>
+      </div>
+      <div class="questions">
+        <div class="question">
+          <div class="q-label">When I think about meal planning, tracking, and counting calories, I feel overwhelmed.</div>
+          <div class="q-likert" data-key="q_overwhelmed">
+            <div class="q-likert-item" onclick="selectLikert(this,'q_overwhelmed',1)"><div class="q-likert-btn">Strongly<br>Disagree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_overwhelmed',2)"><div class="q-likert-btn">Disagree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_overwhelmed',3)"><div class="q-likert-btn">Neutral</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_overwhelmed',4)"><div class="q-likert-btn">Agree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_overwhelmed',5)"><div class="q-likert-btn">Strongly<br>Agree</div></div>
+          </div>
+        </div>
+        <div class="question">
+          <div class="q-label">I tend to delay cooking for myself and would rather do something else.</div>
+          <div class="q-likert" data-key="q_cooking_avoidance">
+            <div class="q-likert-item" onclick="selectLikert(this,'q_cooking_avoidance',1)"><div class="q-likert-btn">Strongly<br>Disagree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_cooking_avoidance',2)"><div class="q-likert-btn">Disagree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_cooking_avoidance',3)"><div class="q-likert-btn">Neutral</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_cooking_avoidance',4)"><div class="q-likert-btn">Agree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_cooking_avoidance',5)"><div class="q-likert-btn">Strongly<br>Agree</div></div>
+          </div>
+        </div>
+        <div class="question">
+          <div class="q-label">I feel ready and excited to meal prep for deep nourishment at home.</div>
+          <div class="q-likert" data-key="q_excited_prep">
+            <div class="q-likert-item" onclick="selectLikert(this,'q_excited_prep',1)"><div class="q-likert-btn">Strongly<br>Disagree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_excited_prep',2)"><div class="q-likert-btn">Disagree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_excited_prep',3)"><div class="q-likert-btn">Neutral</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_excited_prep',4)"><div class="q-likert-btn">Agree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_excited_prep',5)"><div class="q-likert-btn">Strongly<br>Agree</div></div>
+          </div>
+        </div>
+        <div class="question">
+          <div class="q-label">How many meals do you typically eat per day?</div>
+          <div class="q-options" id="q_meals_per_day">
+            <label class="q-option"><input type="radio" name="meals_per_day" value="1_2"><div class="q-option-indicator"></div><span class="q-option-text">1–2 meals (intermittent fasting or OMAD)</span></label>
+            <label class="q-option"><input type="radio" name="meals_per_day" value="3"><div class="q-option-indicator"></div><span class="q-option-text">3 meals</span></label>
+            <label class="q-option"><input type="radio" name="meals_per_day" value="3_snacks"><div class="q-option-indicator"></div><span class="q-option-text">3 meals + snacks</span></label>
+            <label class="q-option"><input type="radio" name="meals_per_day" value="grazing"><div class="q-option-indicator"></div><span class="q-option-text">I graze throughout the day</span></label>
+            <label class="q-option"><input type="radio" name="meals_per_day" value="varies"><div class="q-option-indicator"></div><span class="q-option-text">It varies a lot day to day</span></label>
+          </div>
+        </div>
+        <div class="question">
+          <div class="q-label">How much time can you realistically dedicate to meal prep, twice a week?</div>
+          <div class="q-hint">The goal is a well-stocked kitchen — bone broth in the freezer, ferments ready, grains cooked, proteins prepped — so that any meal comes together in under 20 minutes without effort or thought.</div>
+          <div class="q-options" id="q_cook_time">
+            <label class="q-option"><input type="radio" name="cook_time" value="under_30"><div class="q-option-indicator"></div><div><div class="q-option-text">Under 30 minutes</div><div class="q-option-sub">Quick foundations only — we'll keep it very simple</div></div></label>
+            <label class="q-option"><input type="radio" name="cook_time" value="30_60"><div class="q-option-indicator"></div><div><div class="q-option-text">30–60 minutes</div><div class="q-option-sub">Enough for broth, a protein, and a grain</div></div></label>
+            <label class="q-option"><input type="radio" name="cook_time" value="1_2hrs"><div class="q-option-indicator"></div><div><div class="q-option-text">1–2 hours</div><div class="q-option-sub">A full prep session — broth, ferments, proteins, roasted vegetables</div></div></label>
+            <label class="q-option"><input type="radio" name="cook_time" value="over_2hrs"><div class="q-option-indicator"></div><div><div class="q-option-text">2+ hours</div><div class="q-option-sub">I love a deep prep day — teach me everything</div></div></label>
+          </div>
+        </div>
+        <div class="question">
+          <div class="q-label">Who are you cooking for?</div>
+          <div class="q-options" id="q_cooking_for">
+            <label class="q-option"><input type="radio" name="cooking_for" value="solo"><div class="q-option-indicator"></div><span class="q-option-text">Just me</span></label>
+            <label class="q-option"><input type="radio" name="cooking_for" value="couple"><div class="q-option-indicator"></div><span class="q-option-text">Me and a partner</span></label>
+            <label class="q-option"><input type="radio" name="cooking_for" value="family_no_kids"><div class="q-option-indicator"></div><span class="q-option-text">Family without young children</span></label>
+            <label class="q-option"><input type="radio" name="cooking_for" value="family_kids"><div class="q-option-indicator"></div><span class="q-option-text">Family with young children</span></label>
+          </div>
+        </div>
+        <div class="question">
+          <div class="q-label">Approximate weekly grocery budget</div>
+          <div class="q-options" id="q_budget">
+            <label class="q-option"><input type="radio" name="budget" value="under_100"><div class="q-option-indicator"></div><span class="q-option-text">Under $100</span></label>
+            <label class="q-option"><input type="radio" name="budget" value="100_200"><div class="q-option-indicator"></div><span class="q-option-text">$100–200</span></label>
+            <label class="q-option"><input type="radio" name="budget" value="200_350"><div class="q-option-indicator"></div><span class="q-option-text">$200–350</span></label>
+            <label class="q-option"><input type="radio" name="budget" value="over_350"><div class="q-option-indicator"></div><span class="q-option-text">$350+ — quality is the priority</span></label>
+          </div>
+        </div>
+        <div class="question">
+          <div class="q-label">What kitchen equipment do you have? <span style="font-weight:300;font-size:14px;color:var(--clay)">Select all that apply</span></div>
+          <div class="q-multi" id="q_equipment">
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">High-speed blender</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Instant Pot / pressure cooker</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Air fryer</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Rice cooker</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Cast iron pan</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Food processor</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Slow cooker</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Just the basics</span></label>
+          </div>
+        </div>
+      </div>
+      <div class="step-nav">
+        <button class="btn-back" onclick="goToStep(3)">&#8592; Back</button>
+        <span class="nav-step-label">Step 4 of 8</span>
+        <button class="btn-next" onclick="goToStep(5)">Continue &#8594;</button>
+      </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step-screen" id="step5">
+      <div class="step-header">
+        <div class="step-number">Step 5 of 8</div>
+        <h2 class="step-title">Energy &<br>Attention</h2>
+        <p class="step-subtitle">How your body moves through time, stress, and rest.</p>
+      </div>
+      <div class="questions">
+        <div class="question">
+          <div class="q-label">My energy throughout the day is consistent, plentiful, and dependable.</div>
+          <div class="q-likert" data-key="q_energy_consistent">
+            <div class="q-likert-item" onclick="selectLikert(this,'q_energy_consistent',1)"><div class="q-likert-btn">Strongly<br>Disagree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_energy_consistent',2)"><div class="q-likert-btn">Disagree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_energy_consistent',3)"><div class="q-likert-btn">Neutral</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_energy_consistent',4)"><div class="q-likert-btn">Agree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_energy_consistent',5)"><div class="q-likert-btn">Strongly<br>Agree</div></div>
+          </div>
+        </div>
+        <div class="question">
+          <div class="q-label">I wake up restored, rested, and recovered.</div>
+          <div class="q-likert" data-key="q_wake_restored">
+            <div class="q-likert-item" onclick="selectLikert(this,'q_wake_restored',1)"><div class="q-likert-btn">Strongly<br>Disagree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_wake_restored',2)"><div class="q-likert-btn">Disagree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_wake_restored',3)"><div class="q-likert-btn">Neutral</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_wake_restored',4)"><div class="q-likert-btn">Agree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_wake_restored',5)"><div class="q-likert-btn">Strongly<br>Agree</div></div>
+          </div>
+        </div>
+        <div class="question">
+          <div class="q-label">I find it challenging to stay focused and my attention tends to jump around.</div>
+          <div class="q-likert" data-key="q_focus_challenge">
+            <div class="q-likert-item" onclick="selectLikert(this,'q_focus_challenge',1)"><div class="q-likert-btn">Strongly<br>Disagree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_focus_challenge',2)"><div class="q-likert-btn">Disagree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_focus_challenge',3)"><div class="q-likert-btn">Neutral</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_focus_challenge',4)"><div class="q-likert-btn">Agree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_focus_challenge',5)"><div class="q-likert-btn">Strongly<br>Agree</div></div>
+          </div>
+        </div>
+        <div class="question">
+          <div class="q-label">How many hours of sleep do you typically get?</div>
+          <div class="q-options" id="q_sleep_hours">
+            <label class="q-option"><input type="radio" name="sleep_hours" value="under_5"><div class="q-option-indicator"></div><span class="q-option-text">Under 5 hours</span></label>
+            <label class="q-option"><input type="radio" name="sleep_hours" value="5_6"><div class="q-option-indicator"></div><span class="q-option-text">5–6 hours</span></label>
+            <label class="q-option"><input type="radio" name="sleep_hours" value="6_7"><div class="q-option-indicator"></div><span class="q-option-text">6–7 hours</span></label>
+            <label class="q-option"><input type="radio" name="sleep_hours" value="7_8"><div class="q-option-indicator"></div><span class="q-option-text">7–8 hours</span></label>
+            <label class="q-option"><input type="radio" name="sleep_hours" value="over_8"><div class="q-option-indicator"></div><span class="q-option-text">8+ hours</span></label>
+          </div>
+        </div>
+        <div class="question">
+          <div class="q-label">Describe your stress — how it shows up, where it comes from.</div>
+          <div class="q-hint">Chronic, acute, work, relational, physical — this shapes your adaptogen and nervous system protocol.</div>
+          <textarea class="q-input" id="q_stress" placeholder="e.g. I run a business and carry low-grade stress constantly. It shows up as tight shoulders and poor sleep..."></textarea>
+        </div>
+      </div>
+      <div class="step-nav">
+        <button class="btn-back" onclick="goToStep(4)">&#8592; Back</button>
+        <span class="nav-step-label">Step 5 of 8</span>
+        <button class="btn-next" onclick="goToStep(6)">Continue &#8594;</button>
+      </div>
+    </div>
+
+    <!-- STEP 6 -->
+    <div class="step-screen" id="step6">
+      <div class="step-header">
+        <div class="step-number">Step 6 of 8</div>
+        <h2 class="step-title">Weight &<br>Body</h2>
+        <p class="step-subtitle">Understanding your metabolic type and body composition goals.</p>
+      </div>
+      <div class="questions">
+        <div class="question">
+          <div class="q-label">I know my caloric needs based on my activity level.</div>
+          <div class="q-likert" data-key="q_knows_calories">
+            <div class="q-likert-item" onclick="selectLikert(this,'q_knows_calories',1)"><div class="q-likert-btn">Strongly<br>Disagree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_knows_calories',2)"><div class="q-likert-btn">Disagree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_knows_calories',3)"><div class="q-likert-btn">Neutral</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_knows_calories',4)"><div class="q-likert-btn">Agree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_knows_calories',5)"><div class="q-likert-btn">Strongly<br>Agree</div></div>
+          </div>
+        </div>
+        <div class="question">
+          <div class="q-label">I know my metabolic type's specific nutritional needs.</div>
+          <div class="q-likert" data-key="q_knows_metabolic">
+            <div class="q-likert-item" onclick="selectLikert(this,'q_knows_metabolic',1)"><div class="q-likert-btn">Strongly<br>Disagree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_knows_metabolic',2)"><div class="q-likert-btn">Disagree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_knows_metabolic',3)"><div class="q-likert-btn">Neutral</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_knows_metabolic',4)"><div class="q-likert-btn">Agree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_knows_metabolic',5)"><div class="q-likert-btn">Strongly<br>Agree</div></div>
+          </div>
+        </div>
+        <div class="question">
+          <div class="q-label">Which body type feels most like yours?</div>
+          <div class="q-options" id="q_body_type">
+            <label class="q-option"><input type="radio" name="body_type" value="ectomorph"><div class="q-option-indicator"></div><div><div class="q-option-text">Ectomorph</div><div class="q-option-sub">Naturally lean, faster metabolism, finds it harder to gain muscle or weight</div></div></label>
+            <label class="q-option"><input type="radio" name="body_type" value="mesomorph"><div class="q-option-indicator"></div><div><div class="q-option-text">Mesomorph</div><div class="q-option-sub">Athletic build, responds well to training, gains and loses relatively easily</div></div></label>
+            <label class="q-option"><input type="radio" name="body_type" value="endomorph"><div class="q-option-indicator"></div><div><div class="q-option-text">Endomorph</div><div class="q-option-sub">Tends to store fat more easily, slower metabolism, finds weight loss more effortful</div></div></label>
+            <label class="q-option"><input type="radio" name="body_type" value="mixed"><div class="q-option-indicator"></div><div><div class="q-option-text">A mix — or unsure</div><div class="q-option-sub">Characteristics of more than one type</div></div></label>
+          </div>
+        </div>
+        <div class="question">
+          <div class="q-label">I'd like support with gaining weight in a healthy, sustainable way.</div>
+          <div class="q-likert" data-key="q_gain_weight">
+            <div class="q-likert-item" onclick="selectLikert(this,'q_gain_weight',1)"><div class="q-likert-btn">Strongly<br>Disagree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_gain_weight',2)"><div class="q-likert-btn">Disagree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_gain_weight',3)"><div class="q-likert-btn">Neutral</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_gain_weight',4)"><div class="q-likert-btn">Agree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_gain_weight',5)"><div class="q-likert-btn">Strongly<br>Agree</div></div>
+          </div>
+        </div>
+        <div class="question">
+          <div class="q-label">I'd like support with losing weight in a healthy, sustainable way.</div>
+          <div class="q-likert" data-key="q_lose_weight">
+            <div class="q-likert-item" onclick="selectLikert(this,'q_lose_weight',1)"><div class="q-likert-btn">Strongly<br>Disagree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_lose_weight',2)"><div class="q-likert-btn">Disagree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_lose_weight',3)"><div class="q-likert-btn">Neutral</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_lose_weight',4)"><div class="q-likert-btn">Agree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_lose_weight',5)"><div class="q-likert-btn">Strongly<br>Agree</div></div>
+          </div>
+        </div>
+        <div class="question">
+          <div class="q-label">I know when it's best for me to eat carbohydrates.</div>
+          <div class="q-likert" data-key="q_carb_timing">
+            <div class="q-likert-item" onclick="selectLikert(this,'q_carb_timing',1)"><div class="q-likert-btn">Strongly<br>Disagree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_carb_timing',2)"><div class="q-likert-btn">Disagree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_carb_timing',3)"><div class="q-likert-btn">Neutral</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_carb_timing',4)"><div class="q-likert-btn">Agree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_carb_timing',5)"><div class="q-likert-btn">Strongly<br>Agree</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="step-nav">
+        <button class="btn-back" onclick="goToStep(5)">&#8592; Back</button>
+        <span class="nav-step-label">Step 6 of 8</span>
+        <button class="btn-next" onclick="goToStep(7)">Continue &#8594;</button>
+      </div>
+    </div>
+
+    <!-- STEP 7 -->
+    <div class="step-screen" id="step7">
+      <div class="step-header">
+        <div class="step-number">Step 7 of 8</div>
+        <h2 class="step-title">Your Gut &<br>Inner World</h2>
+        <p class="step-subtitle">Your body speaks. This is where we learn to listen.</p>
+      </div>
+      <div class="questions">
+        <div class="question">
+          <div class="q-label">My stools are inconsistent.</div>
+          <div class="q-hint">Regularity, consistency, and stool quality are among the most revealing markers of gut health.</div>
+          <div class="q-likert" data-key="q_stools_inconsistent">
+            <div class="q-likert-item" onclick="selectLikert(this,'q_stools_inconsistent',1)"><div class="q-likert-btn">Strongly<br>Disagree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_stools_inconsistent',2)"><div class="q-likert-btn">Disagree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_stools_inconsistent',3)"><div class="q-likert-btn">Neutral</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_stools_inconsistent',4)"><div class="q-likert-btn">Agree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_stools_inconsistent',5)"><div class="q-likert-btn">Strongly<br>Agree</div></div>
+          </div>
+        </div>
+        <div class="question">
+          <div class="q-label">My digestion is better when I eat enough fiber.</div>
+          <div class="q-likert" data-key="q_fiber_helps">
+            <div class="q-likert-item" onclick="selectLikert(this,'q_fiber_helps',1)"><div class="q-likert-btn">Strongly<br>Disagree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_fiber_helps',2)"><div class="q-likert-btn">Disagree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_fiber_helps',3)"><div class="q-likert-btn">Neutral</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_fiber_helps',4)"><div class="q-likert-btn">Agree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_fiber_helps',5)"><div class="q-likert-btn">Strongly<br>Agree</div></div>
+          </div>
+        </div>
+        <div class="question">
+          <div class="q-label">After you eat, what do you typically feel? <span style="font-weight:300;font-size:14px;color:var(--clay)">Select all that apply</span></div>
+          <div class="q-multi" id="q_post_meal">
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Pain</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Bloating</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Energy crash</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Inflammation</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Congestion</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Satisfaction & energy</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Lightness & clarity</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Sleepiness</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">It varies a lot</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Other</span></label>
+          </div>
+        </div>
+        <div class="question">
+          <div class="q-label">Do you experience any of these symptoms? <span style="font-weight:300;font-size:14px;color:var(--clay)">Select all that apply</span></div>
+          <div class="q-hint">This helps us understand your full picture and shape your gut and metabolic protocols.</div>
+          <div class="q-multi" id="q_symptoms" style="grid-template-columns:1fr">
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Heartburn after meals</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Upper abdomen pain or burning</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Rapid bloating within 30 min of meals</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Gas and irregular stools</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Sugar cravings</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Early satiety</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Brain fog</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Urgency after fatty meals</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Chronic loose stools</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Nutrient deficits / poor absorption</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Flushing or skin redness</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Runny nose after eating</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Anxiety or mood changes after eating</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Early fullness</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Nausea</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Belching and pressure</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Skin flares or eczema</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Acid reflux</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Fatigue after meals</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Joint pain</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Cramping</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Low-grade fevers</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Itching</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Headaches</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">Palpitations after high-histamine foods</span></label>
+            <label class="q-multi-item"><div class="q-multi-indicator"></div><span class="q-multi-text">None of the above</span></label>
+          </div>
+        </div>
+        <div class="question">
+          <div class="q-label">I know what feels nourishing and regulating to my nervous system.</div>
+          <div class="q-likert" data-key="q_nervous_system_aware">
+            <div class="q-likert-item" onclick="selectLikert(this,'q_nervous_system_aware',1)"><div class="q-likert-btn">Strongly<br>Disagree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_nervous_system_aware',2)"><div class="q-likert-btn">Disagree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_nervous_system_aware',3)"><div class="q-likert-btn">Neutral</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_nervous_system_aware',4)"><div class="q-likert-btn">Agree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_nervous_system_aware',5)"><div class="q-likert-btn">Strongly<br>Agree</div></div>
+          </div>
+        </div>
+        <div class="question">
+          <div class="q-label">I nourish myself dynamically based on energy, recovery, sleep, HRV, and the seasons.</div>
+          <div class="q-likert" data-key="q_dynamic_nourishment">
+            <div class="q-likert-item" onclick="selectLikert(this,'q_dynamic_nourishment',1)"><div class="q-likert-btn">Strongly<br>Disagree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_dynamic_nourishment',2)"><div class="q-likert-btn">Disagree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_dynamic_nourishment',3)"><div class="q-likert-btn">Neutral</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_dynamic_nourishment',4)"><div class="q-likert-btn">Agree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_dynamic_nourishment',5)"><div class="q-likert-btn">Strongly<br>Agree</div></div>
+          </div>
+        </div>
+        <div class="question">
+          <div class="q-label">I recognize when I'm truly hungry versus eating from habit, emotion, or stress.</div>
+          <div class="q-likert" data-key="q_hunger_awareness">
+            <div class="q-likert-item" onclick="selectLikert(this,'q_hunger_awareness',1)"><div class="q-likert-btn">Strongly<br>Disagree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_hunger_awareness',2)"><div class="q-likert-btn">Disagree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_hunger_awareness',3)"><div class="q-likert-btn">Neutral</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_hunger_awareness',4)"><div class="q-likert-btn">Agree</div></div>
+            <div class="q-likert-item" onclick="selectLikert(this,'q_hunger_awareness',5)"><div class="q-likert-btn">Strongly<br>Agree</div></div>
+          </div>
+        </div>
+        <div class="question">
+          <div class="q-label">What is most important for you to experience right now?</div>
+          <div class="q-hint">Healing your gut? Regulating your metabolism? More energy? Describe it in detail.</div>
+          <textarea class="q-input" id="q_experience_now" placeholder="Tell us what feels most urgent and alive for you right now..."></textarea>
+        </div>
+      </div>
+      <div class="step-nav">
+        <button class="btn-back" onclick="goToStep(6)">&#8592; Back</button>
+        <span class="nav-step-label">Step 7 of 8</span>
+        <button class="btn-next" onclick="goToStep(8)">Continue &#8594;</button>
+      </div>
+    </div>
+
+    <!-- STEP 8 -->
+    <div class="step-screen" id="step8">
+      <div class="step-header">
+        <div class="step-number">Step 8 of 8</div>
+        <h2 class="step-title">Final<br>Thoughts</h2>
+        <p class="step-subtitle">You're almost there. Share anything else on your mind.</p>
+      </div>
+      <div class="questions">
+        <div class="question">
+          <div class="q-label">How would you describe the way you eat in and around training or movement?</div>
+          <div class="q-hint">Pre-workout, post-workout, on rest days — what does your eating currently look like around exercise?</div>
+          <textarea class="q-input" id="q_training_eating" placeholder="e.g. I usually train fasted in the morning and eat about an hour after..."></textarea>
+        </div>
+        <div class="question">
+          <div class="q-label">How do you typically eat — pace, environment, alone or with others?</div>
+          <div class="q-hint">Eating at a desk, rushed, slow and seated, with family — this affects digestion as much as food choices do.</div>
+          <textarea class="q-input" id="q_eating_environment" placeholder="e.g. I usually eat lunch at my desk quickly, dinner with my partner..."></textarea>
+        </div>
+        <div class="question">
+          <div class="q-label">Again — what would change everything for you? Anything we haven't asked?</div>
+          <div class="q-hint">Your honesty here helps us create the most alive and personal blueprint possible.</div>
+          <textarea class="q-input" id="q_final_thoughts" placeholder="Share whatever feels important and true..."></textarea>
+        </div>
+      </div>
+      <div class="step-nav">
+        <button class="btn-back" onclick="goToStep(7)">&#8592; Back</button>
+        <span class="nav-step-label">Step 8 of 8</span>
+        <button class="btn-next" onclick="submitForm()" style="background:var(--moss)">Submit My Assessment &#8594;</button>
+      </div>
+    </div>
+
+    <!-- LOADING -->
+    <div class="loading-screen" id="loadingScreen">
+      <div class="loading-inner">
+        <div class="loading-logo">ALKA</div>
+        <div class="loading-orbs">
+          <div class="loading-orb"></div>
+          <div class="loading-orb"></div>
+          <div class="loading-orb"></div>
+          <div class="loading-orb"></div>
+          <div class="loading-orb"></div>
+        </div>
+        <h2 class="loading-title">Building Your Blueprint</h2>
+        <p class="loading-subtitle">Your responses are being woven into a nourishment system built entirely around who you are.</p>
+        <div class="loading-steps" id="loadingSteps">
+          <div class="loading-step" id="ls1"><div class="loading-step-dot"></div>Reading your biology and heritage</div>
+          <div class="loading-step" id="ls2"><div class="loading-step-dot"></div>Mapping your metabolic landscape</div>
+          <div class="loading-step" id="ls3"><div class="loading-step-dot"></div>Crafting your 7-day meal plan</div>
+          <div class="loading-step" id="ls4"><div class="loading-step-dot"></div>Building your food-as-medicine protocol</div>
+          <div class="loading-step" id="ls5"><div class="loading-step-dot"></div>Finalizing your blueprint</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /shell -->
+
+<!-- BLUEPRINT (outside shell so it's full page) -->
+<div id="blueprintView"></div>
+
+<script>
+const responses = {};
+const SAVE_KEY = 'alka_questionnaire_progress';
+
+// ── SAVE / RESUME ──────────────────────────────────────────────
+function saveProgress(currentStepNum) {
+  // Collect all current field values before saving
+  const fieldData = {};
+  document.querySelectorAll('.q-input').forEach(el => {
+    if (el.id) fieldData[el.id] = el.value;
+  });
+  const radioData = {};
+  document.querySelectorAll('input[type=radio]:checked').forEach(r => {
+    radioData[r.name] = r.value;
+  });
+  const multiData = {};
+  document.querySelectorAll('.q-multi').forEach(grid => {
+    if (grid.id) {
+      multiData[grid.id] = [];
+      grid.querySelectorAll('.q-multi-item.selected .q-multi-text').forEach(t => multiData[grid.id].push(t.textContent.trim()));
+    }
+  });
+  const save = { step: currentStepNum, fields: fieldData, radios: radioData, multi: multiData, savedAt: Date.now() };
+  localStorage.setItem(SAVE_KEY, JSON.stringify(save));
+  showSaveIndicator();
+}
+
+function clearSave() {
+  localStorage.removeItem(SAVE_KEY);
+}
+
+function showSaveIndicator() {
+  const ind = document.getElementById('saveIndicator');
+  if (!ind) return;
+  ind.classList.add('visible');
+  clearTimeout(ind._timeout);
+  ind._timeout = setTimeout(() => ind.classList.remove('visible'), 2000);
+}
+
+function restoreProgress(save) {
+  // Restore text inputs
+  Object.entries(save.fields || {}).forEach(([id, val]) => {
+    const el = document.getElementById(id);
+    if (el) el.value = val;
+  });
+  // Restore radios
+  Object.entries(save.radios || {}).forEach(([name, val]) => {
+    const radio = document.querySelector(`input[name="${name}"][value="${val}"]`);
+    if (radio) {
+      radio.checked = true;
+      radio.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+  });
+  // Restore multi-select
+  Object.entries(save.multi || {}).forEach(([gridId, selected]) => {
+    const grid = document.getElementById(gridId);
+    if (!grid) return;
+    grid.querySelectorAll('.q-multi-item').forEach(item => {
+      const text = item.querySelector('.q-multi-text');
+      if (text && selected.includes(text.textContent.trim())) item.classList.add('selected');
+    });
+  });
+}
+
+function checkForSavedProgress() {
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (!raw) return;
+    const save = JSON.parse(raw);
+    if (!save || !save.step) return;
+    const ageMs = Date.now() - (save.savedAt || 0);
+    const ageDays = ageMs / (1000 * 60 * 60 * 24);
+    if (ageDays > 7) { clearSave(); return; } // discard saves older than 7 days
+    // Show resume banner
+    const banner = document.getElementById('resumeBanner');
+    if (banner) {
+      const timeStr = new Date(save.savedAt).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+      document.getElementById('resumeTime').textContent = timeStr;
+      banner.style.display = 'flex';
+      document.getElementById('resumeBtn').onclick = () => {
+        banner.style.display = 'none';
+        document.getElementById('welcomeScreen').style.display = 'none';
+        document.getElementById('headerProgress').style.display = 'flex';
+        restoreProgress(save);
+        goToStep(save.step);
+      };
+      document.getElementById('resumeDismissBtn').onclick = () => {
+        clearSave();
+        banner.style.display = 'none';
+      };
+    }
+  } catch(e) { clearSave(); }
+}
+
+// ── ORIGINAL FUNCTIONS ─────────────────────────────────────────
+function startAssessment() {
+  document.getElementById('welcomeScreen').style.display = 'none';
+  document.getElementById('headerProgress').style.display = 'flex';
+  clearSave();
+  goToStep(1);
+}
+
+function goToStep(n) {
+  document.querySelectorAll('.step-screen').forEach(s => s.classList.remove('active'));
+  const target = document.getElementById('step' + n);
+  if (target) {
+    target.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  const pct = (n / 8) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('headerStepText').textContent = 'Step ' + n + ' of 8';
+  if (n > 1) saveProgress(n); // autosave on every step advance
+}
+
+function selectLikert(el, key, val) {
+  const parent = el.closest('[data-key]');
+  parent.querySelectorAll('.q-likert-item').forEach(i => i.classList.remove('selected'));
+  el.classList.add('selected');
+  responses[key] = val;
+}
+
+function toggleConditional(id) { document.getElementById(id).classList.add('visible'); }
+function hideConditional(id) { document.getElementById(id).classList.remove('visible'); }
+
+// Radio styling
+document.querySelectorAll('.q-option input[type=radio]').forEach(radio => {
+  radio.addEventListener('change', function() {
+    const group = this.name;
+    document.querySelectorAll(`input[name="${group}"]`).forEach(r => {
+      r.closest('.q-option').classList.remove('selected');
+    });
+    this.closest('.q-option').classList.add('selected');
+    if (group === 'sex') {
+      const wrap = document.getElementById('q_hormonal_context_wrap');
+      const f = document.getElementById('q_hormonal_female');
+      const m = document.getElementById('q_hormonal_male');
+      const o = document.getElementById('q_hormonal_other');
+      wrap.style.display = 'block';
+      f.style.display = 'none'; m.style.display = 'none'; o.style.display = 'none';
+      if (this.value === 'female') f.style.display = 'flex';
+      else if (this.value === 'male') m.style.display = 'flex';
+      else if (this.value === 'nonbinary') o.style.display = 'flex';
+      else wrap.style.display = 'none';
+      wrap.querySelectorAll('input[type=radio]').forEach(r => {
+        r.addEventListener('change', function() {
+          wrap.querySelectorAll('input[name="hormonal"]').forEach(x => x.closest('.q-option').classList.remove('selected'));
+          this.closest('.q-option').classList.add('selected');
+        });
+      });
+    }
+  });
+});
+
+// Multi select
+document.querySelectorAll('.q-multi-item').forEach(item => {
+  item.addEventListener('click', function() { this.classList.toggle('selected'); });
+});
+
+function collectResponses() {
+  document.querySelectorAll('.q-input').forEach(el => {
+    if (el.id) responses[el.id] = el.value;
+  });
+  document.querySelectorAll('input[type=radio]:checked').forEach(r => {
+    responses['radio_' + r.name] = r.value;
+  });
+  // Multi-select
+  const multiGroups = {};
+  document.querySelectorAll('.q-multi').forEach(grid => {
+    const groupId = grid.id || grid.closest('.question').querySelector('.q-label').textContent.slice(0,20);
+    const selected = [];
+    grid.querySelectorAll('.q-multi-item.selected .q-multi-text').forEach(t => selected.push(t.textContent.trim()));
+    if (grid.id) responses['multi_' + grid.id] = selected;
+  });
+  return responses;
+}
+
+async function submitForm() {
+  collectResponses();
+  clearSave(); // progress complete — clear saved state
+  // Show loading
+  document.querySelectorAll('.step-screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('headerProgress').style.display = 'none';
+  document.getElementById('loadingScreen').classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Animate loading steps
+  const steps = ['ls1','ls2','ls3','ls4','ls5'];
+  let stepIdx = 0;
+  const stepInterval = setInterval(() => {
+    if (stepIdx < steps.length) {
+      document.getElementById(steps[stepIdx]).classList.add('active');
+      stepIdx++;
+    }
+  }, 1800);
+
+  const userName = responses.q_name || 'You';
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+
+  const prompt = `You are ALKA — a culinary medicine intelligence system grounded in the Medicinal framework by Tomás El Rayess. You have received a detailed nourishment assessment from ${userName}. Generate their personalized Medicinal Nourishment Blueprint as a single JSON object.
+
+═══════════════════════════════════════════════
+CULINARY MEDICINE DOCTRINE (your foundational framework)
+═══════════════════════════════════════════════
+
+WHAT THIS IS:
+Culinary medicine is an evidence-based field that blends ancestral nourishing wisdom with cutting-edge microbiome and metabolic science. It is not conventional nutrition, a fad diet, integrative medicine, food science, or culinary arts. It does not follow one dietary philosophy. It is a practical, personalized medical system for eating that prevents and treats disease and restores wellbeing. The central question is always: "What and how do I eat for THIS person's current goals, needs, and biological state?" The same diet does not work for everyone.
+
+THE BODY AS ECOSYSTEM:
+The body is not a machine - it is a natural living system, more like a forest than an engine. The human body is organized around four genomes in constant dialogue: the genome, epigenome, microbiome, and virome. These interact continuously with three evolutionary systems: the hormonal system, the nervous system, and the immune system. The gut is central - it manages 70-80% of immune function, produces more neurotransmitters than the brain, sets circadian rhythms for organs, and orchestrates hormone metabolism. When the gut is thriving, the whole system coheres. Gut healing is the fastest pathway to metabolic restoration - often showing improvement in 30-90 days, whereas full metabolic or body recomposition takes 6-12+ months.
+
+THE MICROBIOME LAYER:
+Gut bacteria produce short-chain fatty acids (SCFAs - butyrate, propionate, acetate) from dietary fiber. These regulate inflammation, insulin sensitivity, colon wall integrity, and appetite hormones (GLP-1, PYY, ghrelin). When the gut barrier weakens (leaky gut), endotoxins (LPS) enter the bloodstream and drive systemic inflammation, insulin resistance, visceral fat, fatty liver, fatigue, and brain fog. Poor gut health worsens blood sugar control AND poor blood sugar control damages the gut - a bidirectional relationship. Healing the gut heals metabolism.
+
+METABOLIC TYPES (essential starting point, not a fixed label):
+- Endomorph: Efficient fat storage, gains muscle but loses fat slowly, requires protein-dominant, lower-carb eating and strategic carb cycling. Highly sensitive to simple carbs and insulin.
+- Mesomorph: Responds well to training, adapts quickly, more metabolic flexibility. Moderate carb cycling works well.
+- Ectomorph: Naturally lean, may struggle to gain muscle. Higher carb and caloric needs, faster metabolism.
+Most people are mixed types. These are ancestral survival strategies - dynamic, not destiny. Apply to all recommendations.
+
+FOUNDATIONAL MEDICINAL FOODS (must inform all blueprint recommendations):
+1. Bone broth: Glutamine, glycine, collagen - repairs gut lining, supports nervous system, reduces inflammation. 1-2 cups daily during healing.
+2. Fermented foods (kimchi, sauerkraut, lacto-fermented vegetables, Jun kombucha, kefir, live yogurt): Restore microbial diversity, immunoregulate, produce SCFAs, support Treg cells that calm food intolerances. Daily practice, not occasional.
+3. Apple cider vinegar (diluted): Stimulates digestive juices, improves gastric acid, modulates blood glucose. Before meals.
+4. Adaptogens and herbs: Woven into daily ritual - not supplements but medicinal foods. Cordyceps, lion's mane, reishi, ashwagandha, maca, chaga each have specific functions. Use 5-days-on / 2-days-off rhythm for adaptogens to maintain receptor sensitivity (the off days are not gaps - they are part of the protocol).
+5. High-quality animal protein (grass-fed, pasture-raised, wild-caught): 1g per pound of ideal body weight minimum. Protein is not just a macronutrient - it is the raw material for gut lining repair, neurotransmitter synthesis, muscle preservation, hormonal signaling, and immune function.
+6. Prebiotic fiber: Jerusalem artichoke, garlic, onions, nopales, chicory, green banana, leeks - feeds beneficial microbes, regulates glucose, produces SCFAs.
+7. Anti-inflammatory fats: Olive oil, avocado, wild-caught fish (omega-3), cultured butter, duck fat, tallow. Seed oils disrupt cellular membranes and mitochondria.
+8. Sea vegetables: Kombu, wakame, nori - mineral-rich, deeply anti-inflammatory, support thyroid and microbiome.
+9. Fungi: Shiitake, lion's mane, reishi, cordyceps, oyster, chanterelle - immune modulation, cognitive support, metabolic benefits.
+
+THE REGENERATIVE KITCHEN METHOD:
+Sunday prep (2 hours) creates the medicinal foundation for the entire week: bone broth, cooked grains, roasted proteins, fermented condiments, prepped vegetables. This mise en place for gut healing means every weekday meal takes under 20 minutes. The method is: prep foundations once, assemble daily. This is how deep nourishment becomes effortless and sustainable.
+
+CARB CYCLING PRINCIPLE:
+Carbohydrates are cycled based on training load and metabolic type, not eliminated. On high-training days: replenish glycogen with complex carbs (sweet potato, wild rice, sourdough, legumes). On rest days: lower carb, higher fat and protein. This maintains metabolic flexibility - the body's ability to switch between burning glucose and fat efficiently. Metabolic inflexibility (stuck in storage mode) is the root of most chronic conditions.
+
+MEAL SEQUENCING:
+Always start meals with vegetables or fermented foods, then protein and fat, then any carbohydrates. This blunts glucose spikes, improves insulin sensitivity, and supports the microbiome.
+
+PLEASURE, CULTURE, AND RITUAL ARE MEDICINE:
+The cultural and pleasurable dimensions of eating are not optional or indulgent - they are clinically significant. Eating for joy activates different neurochemistry than eating from anxiety. Cultural food heritage carries ancestral medicinal intelligence. Slow, mindful meals activate the parasympathetic nervous system, optimize vagal tone, and support digestion. One genuine pleasure meal per week is part of the protocol, not a cheat. The intrinsic reward system - doing things from love and alignment, not from fear or external pressure - is the backbone of sustainable transformation.
+
+HEALING PHASES:
+Phase 1 (Gut Restoration, 1-3 months): Reduce inflammation, remove triggers, repair gut lining, restore microbial diversity. Daily bone broth, fermented foods, ACV, no processed foods, limited simple carbs, no alcohol, no seed oils. Phase 2 (Metabolic Recalibration, 3-9 months): Reintroduce foods strategically, implement carb cycling, optimize protein targets, introduce adaptogenic stack. Phase 3 (Long-term Vitality): Maintenance through flexible nourishment, continued fermented food practice, seasonal eating, and pleasure as medicine. The current gut state determines which phase applies.
+
+CIRCADIAN ALIGNMENT:
+Meal timing matters as much as meal content. Eating in sync with daylight (larger meals earlier, lighter dinner, fasting window) improves insulin sensitivity, supports the microbiome's own circadian clock, and optimizes melatonin/cortisol balance. Late-night high-sugar eating disrupts sleep and raises cortisol at night.
+
+TONE AND VOICE:
+Write as a wise, warm culinary medicine practitioner - not as a wellness app or calorie counter. Use language that is empowering, embodied, specific, and intelligent. Honor the person's biology without pathologizing it. Frame everything as restoration, not restriction. Reference the body's innate healing intelligence. Be specific about why each recommendation serves this individual - connect food choices to biological mechanisms in plain, resonant language.
+
+═══════════════════════════════════════════════
+ASSESSMENT DATA
+═══════════════════════════════════════════════
+
+${JSON.stringify(responses, null, 2)}
+
+═══════════════════════════════════════════════
+BLUEPRINT GENERATION INSTRUCTIONS
+═══════════════════════════════════════════════
+
+Apply the doctrine above to this specific person. Determine:
+1. Their likely metabolic type from age, body type, activity level, energy patterns, and weight history in the data
+2. Their current healing phase (gut restoration / metabolic recalibration / vitality maintenance) based on reported symptoms and patterns
+3. Which foundational medicinal foods are most critical for them right now
+4. What their cultural heritage tells you about ancestral food intelligence to honor
+5. What their lifestyle reality (cooking time, budget, household size) requires in terms of practicality
+
+Scores (0-100) must be calibrated honestly to their reported state. A score of 55 is not bad - it is a clear, honest starting point with a clear path forward.
+
+Return ONLY a valid JSON object (no markdown, no backticks, no explanation) with this exact structure:
+{
+  "archetype_name": "2-3 word evocative archetype reflecting metabolic type + cultural identity",
+  "archetype_tag": "short poetic descriptor of what this body is called to do",
+  "archetype_description": "3-4 sentences: their metabolic and biological story told with warmth and intelligence. Name their type, their current state, their innate strengths, and what they are moving toward.",
+  "primary_focus": "One sentence: the single most important shift for them right now, grounded in culinary medicine principles",
+  "scores": {
+    "gut_vitality": 0,
+    "energy_drive": 0,
+    "metabolic_clarity": 0,
+    "recovery_quality": 0
+  },
+  "metabolic_title": "A compelling, personal title for their metabolic story - not clinical, but resonant",
+  "metabolic_intro": "2 sentences explaining their current metabolic state in plain, empowering language grounded in gut-metabolism interconnection.",
+  "metabolic_items": [
+    {"title": "specific insight title", "text": "2-3 sentences connecting their symptom or pattern to a specific biological mechanism - SCFAs, cortisol, HPA axis, gut lining, circadian rhythm. Always positive and actionable."},
+    {"title": "...", "text": "..."},
+    {"title": "...", "text": "..."},
+    {"title": "...", "text": "..."},
+    {"title": "...", "text": "..."},
+    {"title": "...", "text": "..."}
+  ],
+  "pillars": [
+    {"number": "01", "title": "pillar title", "text": "2-3 sentences. Their primary medicinal food focus - specific foods, why, and what they do in this person's body."},
+    {"number": "02", "title": "pillar title", "text": "..."},
+    {"number": "03", "title": "pillar title", "text": "..."}
+  ],
+  "vitality_markers": [
+    {"marker": "A", "title": "marker title", "text": "What this score means for them specifically and what will shift it - 2 sentences."},
+    {"marker": "B", "title": "...", "text": "..."},
+    {"marker": "C", "title": "...", "text": "..."},
+    {"marker": "D", "title": "...", "text": "..."}
+  ],
+  "meal_plan_intro": "1-2 sentences: the philosophy behind their meal plan - why these foods, this rhythm, for their specific biology and goals.",
+  "meal_plan": {
+    "monday": {
+      "theme": "one word theme",
+      "context": "e.g. High Training · MORE Day 1 of 5",
+      "more_day": true,
+      "meals": [
+        {"slot":"Ritual","name":"...","desc":"ingredient · ingredient","time":"X min","serves":1,"type":"ritual","ingredients":[["name","qty"]],"method":["Step."],"macros":{"cal":0,"protein":0,"carbs":0,"fat":0,"fiber":0},"note":"optional medicinal note"},
+        {"slot":"Breakfast","name":"...","desc":"...","time":"X min","serves":1,"type":"breakfast","ingredients":[["name","qty"]],"method":["Step 1.","Step 2."],"macros":{"cal":0,"protein":0,"carbs":0,"fat":0,"fiber":0}},
+        {"slot":"Lunch","name":"...","desc":"...","time":"X min","serves":1,"type":"lunch","ingredients":[["name","qty"]],"method":["Step 1.","Step 2."],"macros":{"cal":0,"protein":0,"carbs":0,"fat":0,"fiber":0}},
+        {"slot":"Snack","name":"...","desc":"...","time":"X min","serves":1,"type":"snack","ingredients":[["name","qty"]],"method":["Step."],"macros":{"cal":0,"protein":0,"carbs":0,"fat":0,"fiber":0}},
+        {"slot":"Dinner","name":"...","desc":"...","time":"X min","serves":1,"type":"dinner","ingredients":[["name","qty"]],"method":["Step 1.","Step 2.","Step 3."],"macros":{"cal":0,"protein":0,"carbs":0,"fat":0,"fiber":0},"note":"optional note"}
+      ],
+      "daily_total": {"cal": 0, "protein": 0, "carbs": 0, "fat": 0}
+    },
+    "tuesday": { "theme": "...", "context": "...", "more_day": true, "meals": [], "daily_total": {"cal":0,"protein":0,"carbs":0,"fat":0} },
+    "wednesday": { "theme": "...", "context": "...", "more_day": true, "meals": [], "daily_total": {"cal":0,"protein":0,"carbs":0,"fat":0} },
+    "thursday": { "theme": "...", "context": "...", "more_day": true, "meals": [], "daily_total": {"cal":0,"protein":0,"carbs":0,"fat":0} },
+    "friday": { "theme": "...", "context": "...", "more_day": true, "meals": [], "daily_total": {"cal":0,"protein":0,"carbs":0,"fat":0} },
+    "saturday": { "theme": "...", "context": "Prep Day · MORE Rest Day 1 of 2", "more_day": false, "meals": [], "daily_total": {"cal":0,"protein":0,"carbs":0,"fat":0} },
+    "sunday": { "theme": "...", "context": "Rest & Restore · MORE Rest Day 2 of 2", "more_day": false, "meals": [], "daily_total": {"cal":0,"protein":0,"carbs":0,"fat":0} }
+  },
+  "shopping_list": {
+    "produce": ["item with quantity for the week", "item with quantity"],
+    "proteins": ["item with quantity", "item with quantity"],
+    "pantry": ["item", "item"],
+    "herbs_adaptogens": ["item", "item"],
+    "ferments_condiments": ["item", "item"],
+    "dairy_eggs": ["item with quantity", "item with quantity"]
+  },
+  "meal_prep_note": "2-3 sentences: specific Sunday prep guidance for this person - what to make, in what order, and why it powers their week."
+}`;
+
+  try {
+    const res = await fetch('/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt })
+    });
+    const data = await res.json();
+    clearInterval(stepInterval);
+    steps.forEach(s => document.getElementById(s).classList.add('active'));
+
+    const text = data.content.map(c => c.text || '').join('');
+    const clean = text.replace(/```json|```/g, '').trim();
+
+    // Attempt to parse — if truncated, attempt JSON repair before giving up
+    let bp;
+    try {
+      bp = JSON.parse(clean);
+    } catch(parseErr) {
+      // Try to recover a truncated JSON by finding the last complete top-level key
+      let repaired = clean;
+      // Remove any trailing incomplete fragment and close open braces/brackets
+      const depth = { brace: 0, bracket: 0 };
+      let lastSafeIdx = 0;
+      for (let i = 0; i < repaired.length; i++) {
+        const ch = repaired[i];
+        if (ch === '{') depth.brace++;
+        else if (ch === '}') { depth.brace--; if (depth.brace === 0) lastSafeIdx = i; }
+        else if (ch === '[') depth.bracket++;
+        else if (ch === ']') depth.bracket--;
+      }
+      // Trim to last complete root object close
+      repaired = repaired.slice(0, lastSafeIdx + 1);
+      try {
+        bp = JSON.parse(repaired);
+        console.warn('Blueprint JSON was truncated — recovered to last complete object.');
+      } catch(repairErr) {
+        throw new Error('JSON could not be repaired: ' + parseErr.message);
+      }
+    }
+
+    setTimeout(() => {
+      renderBlueprint(bp, userName, dateStr);
+    }, 600);
+
+  } catch(err) {
+    clearInterval(stepInterval);
+    console.error('Blueprint generation error:', err);
+    // Show a graceful error state or fallback
+    document.getElementById('loadingScreen').classList.remove('active');
+    document.getElementById('appShell').style.display = 'none';
+    document.getElementById('blueprintView').style.display = 'block';
+    document.getElementById('blueprintView').innerHTML = `
+      <div style="min-height:100vh;background:var(--earth);display:flex;align-items:center;justify-content:center;padding:48px;font-family:'Chillax',sans-serif;">
+        <div style="text-align:center;max-width:480px">
+          <div style="font-family:'Cormorant Garamond',serif;font-weight:700;font-size:36px;color:var(--terracotta);letter-spacing:0.1em;margin-bottom:32px">ALKA</div>
+          <h2 style="color:var(--warm-white);font-size:28px;margin-bottom:16px">Almost there</h2>
+          <p style="color:rgba(255,255,255,0.6);font-size:15px;line-height:1.7">Something went wrong generating your blueprint. Please try again, or contact the ALKA team.<br><br>Error: ${err.message}</p>
+        </div>
+      </div>`;
+  }
+}
+
+function renderBlueprint(bp, userName, dateStr) {
+  document.getElementById('loadingScreen').classList.remove('active');
+  document.getElementById('appShell').style.display = 'none';
+
+  const days = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
+  const dayLabels = ['MON','TUE','WED','THU','FRI','SAT','SUN'];
+
+  const html = `
+    <div class="bp-cover">
+      <div class="bp-orb bp-orb-1"></div>
+      <div class="bp-orb bp-orb-2"></div>
+      <div class="bp-cover-header">
+        <div class="bp-cover-logo">ALKA</div>
+        <div class="bp-cover-tag">Nourishment Blueprint</div>
+      </div>
+      <div class="bp-cover-center">
+        <div class="bp-cover-eyebrow">Personal Nourishment Blueprint</div>
+        <div class="bp-cover-title">
+          Your<br><span class="accent">Blueprint.</span>
+        </div>
+        <div class="bp-cover-divider"></div>
+        <div class="bp-cover-for">Prepared for</div>
+        <div class="bp-cover-name">${userName}</div>
+      </div>
+      <div class="bp-cover-footer">
+        <div class="bp-cover-footer-text">ALKA · Culinary Medicine Intelligence · ${dateStr}</div>
+        <div class="bp-cover-wf">A</div>
+      </div>
+    </div>
+
+    <div class="bp-scores-band">
+      <div class="bp-scores-inner">
+        ${[
+          { label: 'Gut Vitality', key: 'gut_vitality' },
+          { label: 'Energy & Drive', key: 'energy_drive' },
+          { label: 'Metabolic Clarity', key: 'metabolic_clarity' },
+          { label: 'Recovery Quality', key: 'recovery_quality' }
+        ].map(s => `
+          <div>
+            <div class="bp-score-label">${s.label}</div>
+            <div class="bp-score-bar-track"><div class="bp-score-bar-fill" style="width:${bp.scores[s.key] || 60}%"></div></div>
+            <div class="bp-score-value">${bp.scores[s.key] || 60}</div>
+            <div class="bp-score-desc">out of 100</div>
+          </div>`).join('')}
+      </div>
+    </div>
+
+    <div class="bp-metabolic">
+      <div class="bp-metabolic-inner">
+        <div class="bp-metabolic-eyebrow">Your Metabolic State</div>
+        <div class="bp-metabolic-title">${bp.metabolic_title || ''}</div>
+        <div class="bp-metabolic-intro">${bp.metabolic_intro || ''}</div>
+        <div class="bp-metabolic-grid">
+          ${(bp.metabolic_items || []).map(item => `
+            <div class="bp-metabolic-item">
+              <div class="bp-metabolic-marker"></div>
+              <div class="bp-metabolic-item-title">${item.title}</div>
+              <div class="bp-metabolic-item-text">${item.text}</div>
+            </div>`).join('')}
+        </div>
+      </div>
+    </div>
+
+    <div class="bp-archetype-wrap">
+      <div class="bp-archetype-card">
+        <div class="bp-archetype-left">
+          <div class="bp-arch-system-label">Your Archetype</div>
+          <div class="bp-arch-name">${bp.archetype_name || ''}</div>
+          <div class="bp-arch-tag">${bp.archetype_tag || ''}</div>
+        </div>
+        <div class="bp-archetype-right">
+          <div class="bp-arch-framework-label">Your Story</div>
+          <div class="bp-arch-desc">${bp.archetype_description || ''}</div>
+          <div style="font-size:13px;font-weight:300;color:rgba(255,255,255,0.4);line-height:1.6;border-top:1px solid rgba(255,255,255,0.08);padding-top:16px;font-style:italic">${bp.primary_focus || ''}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bp-pillars-section">
+      <div class="bp-pillars">
+        ${(bp.pillars || []).map(p => `
+          <div class="bp-pillar">
+            <div class="bp-pillar-number">${p.number}</div>
+            <div class="bp-pillar-title">${p.title}</div>
+            <div class="bp-pillar-text">${p.text}</div>
+          </div>`).join('')}
+      </div>
+    </div>
+
+    <div class="bp-vitality-band">
+      <div class="bp-vitality-inner">
+        <div class="bp-vitality-eyebrow">Vitality Markers</div>
+        <div class="bp-vitality-title">The signals your body is sending — and what they mean.</div>
+        <div class="bp-vitality-grid">
+          ${(bp.vitality_markers || []).map(v => `
+            <div class="bp-vitality-item">
+              <div class="bp-vitality-marker">${v.marker}</div>
+              <div class="bp-vitality-item-title">${v.title}</div>
+              <div class="bp-vitality-item-text">${v.text}</div>
+            </div>`).join('')}
+        </div>
+      </div>
+    </div>
+
+    <div class="week-band">
+      <div class="week-inner">
+        <p class="section-label-mp">Your Full Week</p>
+        <h2 class="week-title">7-Day Meal Plan</h2>
+        <p class="week-subtitle">${bp.meal_plan_intro || 'Click any meal to open the full recipe — ingredients, method, and your personalised macros. Every meal is achievable in under 20 minutes using your weekly prep foundations.'}</p>
+
+        <div class="day-tabs" id="dynamicDayTabs"></div>
+        <div id="dynamicDayPanels"></div>
+
+        <button class="shopping-btn" onclick="toggleShoppingList()">View Shopping List</button>
+      </div>
+    </div>
+
+    <!-- Recipe Modal -->
+    <div class="recipe-modal-overlay" id="recipeOverlay" onclick="closeRecipe(event)">
+      <div class="recipe-modal" id="recipeModal">
+        <button class="recipe-close" onclick="closeRecipeBtn()">&#10005;</button>
+        <div class="recipe-modal-inner" id="recipeContent"></div>
+      </div>
+    </div>
+
+    <!-- Shopping Overlay -->
+    <div class="shopping-overlay" id="shoppingOverlay" onclick="closeShoppingList(event)">
+      <div class="shopping-panel">
+        <div class="shopping-panel-header">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between">
+            <div>
+              <div class="shopping-panel-title">Weekly Shopping List</div>
+              <div class="shopping-panel-sub">For ${userName} · Week of ${dateStr}</div>
+            </div>
+            <button class="shopping-close-btn" onclick="closeShoppingList({target:document.getElementById('shoppingOverlay')})">&#10005;</button>
+          </div>
+          <div class="shopping-panel-actions">
+            <button class="shopping-print-btn" onclick="printShoppingList()">Print</button>
+          </div>
+        </div>
+        <div class="shopping-body" id="shoppingBody"></div>
+      </div>
+    </div>
+
+    <div style="height:80px"></div>
+
+    <div class="bp-action-bar">
+      <div class="bp-action-bar-text">ALKA · ${userName}'s Nourishment Blueprint · ${dateStr}</div>
+      <div class="bp-action-btns">
+        <button class="btn-restart" onclick="location.reload()">Start Over</button>
+        <button class="btn-pdf" onclick="window.print()">Save as PDF</button>
+      </div>
+    </div>`;
+
+  const view = document.getElementById('blueprintView');
+  view.innerHTML = html;
+
+  // Inject the interactive meal plan HTML (it's already in the DOM via the template literal above)
+  // Now initialise the interactive functions
+  view.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Build dynamic week from AI data
+  buildWeekHTML(bp);
+}
+
+// ── DYNAMIC MEAL PLAN DATA ────────────────────────────────────────────────────
+let DYNAMIC_MEAL_PLAN = {};
+let DYNAMIC_SHOPPING = {};
+
+const DAY_KEYS = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
+const DAY_SHORT = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const DAY_IDS   = ['mon','tue','wed','thu','fri','sat','sun'];
+const DAY_FULL  = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+
+function buildWeekHTML(bp) {
+  DYNAMIC_MEAL_PLAN = {};
+  DYNAMIC_SHOPPING  = bp.shopping_list || {};
+
+  const tabsEl   = document.getElementById('dynamicDayTabs');
+  const panelsEl = document.getElementById('dynamicDayPanels');
+  if (!tabsEl || !panelsEl) return;
+
+  let tabsHTML   = '';
+  let panelsHTML = '';
+
+  DAY_KEYS.forEach((day, idx) => {
+    const d    = bp.meal_plan[day] || {};
+    const id   = DAY_IDS[idx];
+    const full = DAY_FULL[idx];
+    const short = DAY_SHORT[idx];
+    const theme = d.theme || '';
+    const context = d.context || '';
+    const meals = d.meals || [];
+    const total = d.daily_total || {};
+    const isFirst = idx === 0;
+
+    // Store recipes for this day indexed by day_slotindex
+    meals.forEach((meal, mi) => {
+      const key = id + '_' + mi;
+      DYNAMIC_MEAL_PLAN[key] = meal;
+    });
+
+    // Build tabs
+    tabsHTML += `<button class="day-tab${isFirst ? ' active' : ''}" onclick="switchDay('${id}',this)">
+      <span class="tab-day">${short}</span>
+      <span class="tab-theme">${theme}</span>
+    </button>`;
+
+    // Build meal cards
+    let cardsHTML = '';
+    meals.forEach((meal, mi) => {
+      const key = id + '_' + mi;
+      const isRest = meal.type === 'rest';
+      const isPrep = meal.type === 'prep';
+      const extraClass = isRest ? ' meal-card-rest' : isPrep ? ' meal-card-prep' : '';
+      const macrosHTML = (isRest || isPrep || !meal.macros || !meal.macros.cal)
+        ? `<div class="meal-card-macros rest-macros"><span>${meal.desc || ''}</span></div>`
+        : `<div class="meal-card-macros">
+            <span>${meal.macros.cal} kcal</span>
+            <span>P ${meal.macros.protein}g</span>
+            <span>C ${meal.macros.carbs}g</span>
+            <span>F ${meal.macros.fat}g</span>
+           </div>`;
+      cardsHTML += `
+        <div class="meal-card${extraClass}" onclick="openRecipe('${key}')">
+          <div class="meal-card-slot">${meal.slot || ''}</div>
+          <div class="meal-card-name">${meal.name || ''}</div>
+          <div class="meal-card-desc">${meal.desc || ''}</div>
+          ${macrosHTML}
+        </div>`;
+    });
+
+    // Daily total
+    const totalHTML = total.cal
+      ? `<div class="day-total">Daily total: <strong>${total.cal.toLocaleString()} kcal</strong> · Protein <strong>${total.protein}g</strong> · Carbs <strong>${total.carbs}g</strong> · Fat <strong>${total.fat}g</strong></div>`
+      : '';
+
+    panelsHTML += `
+      <div class="day-panel${isFirst ? ' active' : ''}" id="day-${id}">
+        <div class="day-panel-header">
+          <span class="day-panel-name">${full}</span>
+          <span class="day-panel-context">${context}</span>
+        </div>
+        <div class="meal-cards">${cardsHTML}</div>
+        ${totalHTML}
+      </div>`;
+  });
+
+  tabsEl.innerHTML   = tabsHTML;
+  panelsEl.innerHTML = panelsHTML;
+}
+
+function switchDay(day, btn) {
+  document.querySelectorAll('.day-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.day-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  const panel = document.getElementById('day-' + day);
+  if (panel) panel.classList.add('active');
+}
+
+function openRecipe(key) {
+  const r = DYNAMIC_MEAL_PLAN[key];
+  if (!r) return;
+  const isPrep = r.type === 'prep';
+  const isRest = r.type === 'rest';
+  const hasMacros = r.macros && r.macros.cal > 0;
+  const ingredients = r.ingredients || [];
+  const method = r.method || [];
+
+  const content = `
+    <div class="rc-header">
+      <div class="rc-slot">${r.slot || ''}</div>
+      <div class="rc-name">${r.name || ''}</div>
+      <div class="rc-meta">
+        <div class="rc-meta-item"><strong>Prep:</strong> ${r.time || '—'}</div>
+        <div class="rc-meta-item"><strong>Serves:</strong> ${r.serves || 1}</div>
+      </div>
+    </div>
+    ${hasMacros ? `<div class="rc-macros-bar">
+      <div class="rc-macro"><div class="rc-macro-val">${r.macros.cal}</div><div class="rc-macro-label">Calories</div></div>
+      <div class="rc-macro"><div class="rc-macro-val">${r.macros.protein}g</div><div class="rc-macro-label">Protein</div></div>
+      <div class="rc-macro"><div class="rc-macro-val">${r.macros.carbs}g</div><div class="rc-macro-label">Carbs</div></div>
+      <div class="rc-macro"><div class="rc-macro-val">${r.macros.fat}g</div><div class="rc-macro-label">Fat</div></div>
+      <div class="rc-macro"><div class="rc-macro-val">${(r.macros.fiber || 0)}g</div><div class="rc-macro-label">Fibre</div></div>
+    </div>` : ''}
+    ${ingredients.length ? `
+    <div class="rc-section-label">Ingredients</div>
+    <div class="rc-ingredients">
+      ${ingredients.map(([name, amount]) => `<div class="rc-ingredient"><span class="rc-ingredient-name">${name}</span><span class="rc-ingredient-amount">${amount}</span></div>`).join('')}
+    </div>` : ''}
+    ${method.length ? `
+    <div class="rc-section-label">Method</div>
+    <div class="rc-method">
+      ${method.map((step, i) => `<div class="rc-step"><div class="rc-step-num">${String(i+1).padStart(2,'0')}</div><div class="rc-step-text">${step}</div></div>`).join('')}
+    </div>` : ''}
+    ${r.note ? `<div class="rc-note">${r.note}</div>` : ''}
+  `;
+  document.getElementById('recipeContent').innerHTML = content;
+  document.getElementById('recipeOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeRecipe(e) {
+  if (e.target === document.getElementById('recipeOverlay')) closeRecipeBtn();
+}
+function closeRecipeBtn() {
+  document.getElementById('recipeOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function buildShoppingList() {
+  const categories = [
+    { key: 'produce',            label: 'Produce & Fresh' },
+    { key: 'proteins',           label: 'Proteins' },
+    { key: 'ferments_condiments',label: 'Ferments & Condiments' },
+    { key: 'dairy_eggs',         label: 'Dairy & Eggs' },
+    { key: 'pantry',             label: 'Grains & Pantry' },
+    { key: 'herbs_adaptogens',   label: 'Herbs & Adaptogens' },
+  ];
+  return categories.map(cat => {
+    const items = DYNAMIC_SHOPPING[cat.key];
+    if (!items || !items.length) return '';
+    return `
+      <div class="shopping-category">
+        <div class="shopping-category-title">${cat.label}</div>
+        ${items.map(item => {
+          const parts = typeof item === 'string' ? item.split(' — ') : item;
+          const name  = Array.isArray(parts) ? parts[0] : item;
+          const qty   = Array.isArray(parts) && parts[1] ? parts[1] : '';
+          return `<div class="shopping-item">
+            <div class="shopping-check" onclick="this.classList.toggle('checked')"></div>
+            <span class="shopping-item-name">${name}</span>
+            <span class="shopping-item-qty">${qty}</span>
+          </div>`;
+        }).join('')}
+      </div>`;
+  }).join('');
+}
+
+function toggleShoppingList() {
+  const overlay = document.getElementById('shoppingOverlay');
+  if (!overlay.classList.contains('open')) {
+    document.getElementById('shoppingBody').innerHTML = buildShoppingList();
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  } else {
+    closeShoppingList({target: overlay});
+  }
+}
+function closeShoppingList(e) {
+  if (e.target === document.getElementById('shoppingOverlay') || e.target.classList.contains('shopping-close-btn')) {
+    document.getElementById('shoppingOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+}
+function printShoppingList() { window.print(); }
+
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    closeRecipeBtn();
+    const so = document.getElementById('shoppingOverlay');
+    if (so) { so.classList.remove('open'); document.body.style.overflow = ''; }
+  }
+});
+
+// Check for saved progress on load
+checkForSavedProgress();
+</script>
+</body>
+</html>
