@@ -20,7 +20,7 @@
     --rust: #9B4E2E;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  html, body { height: 100%; }
+  html { scroll-behavior: auto; }
   body {
     background: var(--earth);
     color: var(--earth);
@@ -489,6 +489,127 @@
   .meal-card-rest:hover { background: #E8E0D2; }
   .meal-card-prep { background: #EBF0E8; cursor: pointer; }
   .meal-card-prep:hover { background: #E0E8DC; }
+
+  /* Prep day tab */
+  .prep-tab { border-bottom: 2px solid var(--terracotta) !important; }
+
+  /* Saturday evening note */
+  .prep-sat-note {
+    background: #F5F0E8;
+    border-left: 3px solid var(--terracotta);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 16px;
+  }
+  .prep-sat-label {
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    margin-bottom: 6px;
+  }
+  .prep-sat-note p { margin: 0; font-size: 14px; color: #4A3728; line-height: 1.6; }
+
+  /* Sunday foundation summary card */
+  .prep-summary-card {
+    background: linear-gradient(135deg, #C4603A 0%, #8C3E20 100%);
+    border-radius: 12px;
+    padding: 20px 22px;
+    margin-bottom: 20px;
+    color: white;
+  }
+  .prep-summary-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.8;
+    margin-bottom: 8px;
+  }
+  .prep-summary-text { margin: 0; font-size: 14px; line-height: 1.65; opacity: 0.95; }
+
+  /* Prep components */
+  .prep-components-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #8A7E72;
+    margin: 0 0 12px;
+  }
+  .prep-components-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 600px) { .prep-components-grid { grid-template-columns: 1fr; } }
+  .prep-component-card {
+    background: white;
+    border: 1px solid #E8E0D4;
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .prep-comp-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 6px;
+  }
+  .prep-comp-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: #2A1F14;
+  }
+  .prep-comp-time {
+    font-size: 11px;
+    color: var(--terracotta);
+    font-weight: 600;
+    white-space: nowrap;
+    margin-left: 8px;
+  }
+  .prep-comp-method {
+    font-size: 12px;
+    color: #5A4A3A;
+    line-height: 1.55;
+    margin-bottom: 6px;
+  }
+  .prep-comp-feeds {
+    font-size: 11px;
+    color: #7A9470;
+    font-weight: 600;
+  }
+
+  /* Assembly day meals label */
+  .prep-meals-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #8A7E72;
+    margin: 0 0 12px;
+  }
+
+  /* Midweek prep card */
+  .midweek-prep-card {
+    background: #EBF0E8;
+    border-left: 3px solid #7A9470;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-top: 16px;
+  }
+  .midweek-prep-label {
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #7A9470;
+    margin-bottom: 6px;
+  }
+  .midweek-prep-card p { margin: 0; font-size: 14px; color: #3A4A35; line-height: 1.6; }
   .meal-card-slot { font-family: 'Synonym', serif; font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--sage); }
   .meal-card-name { font-family: 'Chillax', sans-serif; font-weight: 600; font-size: 14px; color: var(--earth); line-height: 1.3; }
   .meal-card-rest .meal-card-name { color: #9A8A78; }
@@ -597,6 +718,49 @@
     .bp-action-bar { padding: 16px 24px; }
   }
   #saveIndicator.visible { opacity: 1; }
+
+  /* FULL RECIPE EXPANSION */
+  .rc-actions { display: flex; gap: 12px; margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--bone); flex-wrap: wrap; }
+  .rc-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 20px; border-radius: 3px; font-family: 'Chillax', sans-serif; font-weight: 600; font-size: 13px; cursor: pointer; border: none; transition: all 0.15s; }
+  .rc-btn-full { background: var(--earth); color: var(--warm-white); }
+  .rc-btn-full:hover { background: var(--rust); }
+  .rc-btn-fav { background: transparent; color: var(--earth); border: 1.5px solid var(--earth) !important; }
+  .rc-btn-fav:hover { background: var(--earth); color: var(--warm-white); }
+  .rc-btn-fav.saved { background: var(--sage); color: #fff; border-color: var(--sage) !important; }
+  .rc-full-expanded { margin-top: 28px; padding-top: 24px; border-top: 2px solid var(--bone); }
+  .rc-full-loading { display: flex; align-items: center; gap: 12px; padding: 20px 0; color: var(--earth); opacity: 0.6; font-size: 14px; font-style: italic; }
+  .rc-full-loading-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--terracotta); animation: rcPulse 1.2s infinite; }
+  .rc-full-loading-dot:nth-child(2) { animation-delay: 0.2s; }
+  .rc-full-loading-dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes rcPulse { 0%,100%{opacity:0.3;transform:scale(0.8)} 50%{opacity:1;transform:scale(1)} }
+  .rc-full-section { margin-bottom: 24px; }
+  .rc-full-section-title { font-family: 'Chillax', sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--terracotta); margin-bottom: 12px; }
+  .rc-full-text { font-size: 14px; line-height: 1.8; color: #3a3228; }
+  .rc-full-tip { background: rgba(138,158,126,0.08); border-left: 2px solid var(--sage); padding: 12px 16px; margin-bottom: 8px; font-size: 13px; line-height: 1.7; color: #4a4238; }
+
+  /* FAVORITES PANEL */
+  .fav-panel-overlay { position: fixed; inset: 0; background: rgba(20,15,8,0.6); z-index: 900; display: none; }
+  .fav-panel-overlay.open { display: flex; justify-content: flex-end; }
+  .fav-panel { width: 420px; max-width: 100vw; background: var(--warm-white); height: 100%; overflow-y: auto; animation: slideInRight 0.3s ease; display: flex; flex-direction: column; }
+  .fav-panel-header { background: var(--earth); padding: 32px 28px 24px; }
+  .fav-panel-title { font-family: 'Chillax', sans-serif; font-weight: 700; font-size: 22px; color: var(--warm-white); }
+  .fav-panel-sub { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-top: 6px; }
+  .fav-panel-close { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.1); border: none; color: rgba(255,255,255,0.6); width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 12px; }
+  .fav-panel-body { padding: 24px 28px; flex: 1; }
+  .fav-item { background: var(--bone); border-radius: 3px; padding: 16px 18px; margin-bottom: 12px; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .fav-item:hover { background: rgba(138,158,126,0.15); }
+  .fav-item-name { font-family: 'Chillax', sans-serif; font-weight: 600; font-size: 15px; color: var(--earth); }
+  .fav-item-slot { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(58,50,40,0.5); margin-top: 3px; }
+  .fav-item-remove { background: none; border: none; color: rgba(58,50,40,0.3); cursor: pointer; font-size: 16px; padding: 4px; flex-shrink: 0; }
+  .fav-item-remove:hover { color: var(--terracotta); }
+  .fav-empty { text-align: center; padding: 60px 20px; color: rgba(58,50,40,0.4); font-size: 14px; line-height: 1.7; }
+  .fav-empty-icon { font-size: 36px; margin-bottom: 16px; }
+
+  /* FAV BUTTON IN BLUEPRINT HEADER */
+  .bp-fav-btn { position: fixed; bottom: 28px; left: 28px; z-index: 200; background: var(--earth); color: var(--warm-white); border: none; border-radius: 3px; padding: 12px 20px; font-family: 'Chillax', sans-serif; font-weight: 600; font-size: 13px; cursor: pointer; display: none; align-items: center; gap: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); transition: all 0.15s; }
+  .bp-fav-btn:hover { background: var(--rust); }
+  .bp-fav-btn.visible { display: flex; }
+  .bp-fav-count { background: var(--terracotta); color: #fff; border-radius: 10px; padding: 1px 7px; font-size: 11px; min-width: 18px; text-align: center; }
 </style>
 </head>
 <body>
@@ -1319,6 +1483,23 @@
 <!-- BLUEPRINT (outside shell so it's full page) -->
 <div id="blueprintView"></div>
 
+<!-- FAVORITES PANEL -->
+<div class="fav-panel-overlay" id="favOverlay" onclick="closeFavPanel(event)">
+  <div class="fav-panel" id="favPanel">
+    <div class="fav-panel-header" style="position:relative;">
+      <div class="fav-panel-title">Saved Recipes</div>
+      <div class="fav-panel-sub">Your personal collection</div>
+      <button class="fav-panel-close" onclick="closeFavPanelBtn()">&#10005;</button>
+    </div>
+    <div class="fav-panel-body" id="favBody"></div>
+  </div>
+</div>
+
+<!-- FAV FLOATING BUTTON -->
+<button class="bp-fav-btn" id="favFloatBtn" onclick="openFavPanel()">
+  ♥ &nbsp;Saved &nbsp;<span class="bp-fav-count" id="favCount">0</span>
+</button>
+
 <script>
 const responses = {};
 const SAVE_KEY = 'alka_questionnaire_progress';
@@ -1426,7 +1607,10 @@ function goToStep(n) {
   const target = document.getElementById('step' + n);
   if (target) {
     target.classList.add('active');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Force scroll to top across all possible scroll containers
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
   }
   const pct = (n / 8) * 100;
   document.getElementById('progressFill').style.width = pct + '%';
@@ -1551,8 +1735,23 @@ FOUNDATIONAL MEDICINAL FOODS (must inform all blueprint recommendations):
 8. Sea vegetables: Kombu, wakame, nori - mineral-rich, deeply anti-inflammatory, support thyroid and microbiome.
 9. Fungi: Shiitake, lion's mane, reishi, cordyceps, oyster, chanterelle - immune modulation, cognitive support, metabolic benefits.
 
-THE REGENERATIVE KITCHEN METHOD:
-Sunday prep (2 hours) creates the medicinal foundation for the entire week: bone broth, cooked grains, roasted proteins, fermented condiments, prepped vegetables. This mise en place for gut healing means every weekday meal takes under 20 minutes. The method is: prep foundations once, assemble daily. This is how deep nourishment becomes effortless and sustainable.
+THE REGENERATIVE KITCHEN METHOD — PREP-DAY ARCHITECTURE:
+The ALKA meal plan is a component-based system rooted in the Medicinal doctrine. The user does NOT cook from scratch every day. They prep foundations twice a week and assemble daily. Think of it as mise en place for gut healing — a professional kitchen system applied to home nourishment.
+
+WEEK STRUCTURE:
+- SATURDAY EVENING (~30 min): Marinate proteins overnight for Sunday cook
+- SUNDAY (~2 hours) = PREP SESSION 1: Cook 8-10 foundational components that feed Monday, Tuesday, Wednesday, and half of Thursday. This is the anchor of the week.
+- MONDAY–WEDNESDAY: Assembly days. Every meal uses prepped components. Time to table: under 10 minutes.
+- WEDNESDAY EVENING (~1–1.5 hours) = PREP SESSION 2: Refresh proteins, grains, and vegetables for the second half of the week.
+- THURSDAY–SATURDAY: Assembly days from Prep Session 2. Saturday is lighter — one fresh element encouraged.
+
+SUNDAY PREP SESSION — what to generate:
+Generate 8-10 specific components the user will make on Sunday. Sequence them by cook time (longest in oven first, stovetop running simultaneously, cold preparations last). Examples: spatchcocked roast chicken, bone broth chicken soup, marinated protein, Asian-style slaw, a dip or spread (hummus, white bean, roasted carrot purée), a sauce or dressing, a roasted vegetable tray, a grain or legume base if conditions allow. Always adapt to the user's conditions — SIBO gets garlic-infused oil throughout; histamine gets same-day proteins only (no overnight marinating); metabolic users get no grain base.
+
+ASSEMBLY DAYS — how to write meals:
+Monday through Wednesday and Thursday through Saturday meals are ASSEMBLIES, not recipes. Each meal entry names which prepped components are combined, how they are plated, and what (if anything) is added fresh (a soft-boiled egg, fresh herbs, a fermented condiment from the pantry). Assembly time should be under 10 minutes. Never say "cook the chicken" on an assembly day — say "slice your prepped roast chicken."
+
+LANGUAGE RULE: Never use the word "leftovers." Always say "your prepped components" or "your foundation."
 
 CARB CYCLING PRINCIPLE:
 Carbohydrates are cycled based on training load and metabolic type, not eliminated. On high-training days: replenish glycogen with complex carbs (sweet potato, wild rice, sourdough, legumes). On rest days: lower carb, higher fat and protein. This maintains metabolic flexibility - the body's ability to switch between burning glucose and fat efficiently. Metabolic inflexibility (stuck in storage mode) is the root of most chronic conditions.
@@ -1626,35 +1825,116 @@ Return ONLY a valid JSON object (no markdown, no backticks, no explanation) with
   ],
   "meal_plan_intro": "1-2 sentences: the philosophy behind their meal plan - why these foods, this rhythm, for their specific biology and goals.",
   "meal_plan": {
-    "monday": {
-      "theme": "one word theme",
-      "context": "e.g. High Training · MORE Day 1 of 5",
-      "more_day": true,
-      "meals": [
-        {"slot":"Ritual","name":"...","desc":"ingredient · ingredient","time":"X min","serves":1,"type":"ritual","ingredients":[["name","qty"]],"method":["Step."],"macros":{"cal":0,"protein":0,"carbs":0,"fat":0,"fiber":0},"note":"optional medicinal note"},
-        {"slot":"Breakfast","name":"...","desc":"...","time":"X min","serves":1,"type":"breakfast","ingredients":[["name","qty"]],"method":["Step 1.","Step 2."],"macros":{"cal":0,"protein":0,"carbs":0,"fat":0,"fiber":0}},
-        {"slot":"Lunch","name":"...","desc":"...","time":"X min","serves":1,"type":"lunch","ingredients":[["name","qty"]],"method":["Step 1.","Step 2."],"macros":{"cal":0,"protein":0,"carbs":0,"fat":0,"fiber":0}},
-        {"slot":"Snack","name":"...","desc":"...","time":"X min","serves":1,"type":"snack","ingredients":[["name","qty"]],"method":["Step."],"macros":{"cal":0,"protein":0,"carbs":0,"fat":0,"fiber":0}},
-        {"slot":"Dinner","name":"...","desc":"...","time":"X min","serves":1,"type":"dinner","ingredients":[["name","qty"]],"method":["Step 1.","Step 2.","Step 3."],"macros":{"cal":0,"protein":0,"carbs":0,"fat":0,"fiber":0},"note":"optional note"}
+    "sunday": {
+      "theme": "Foundation",
+      "context": "Prep Session 1 · ~2 hours · Powers Mon–Wed",
+      "more_day": false,
+      "is_prep_day": true,
+      "saturday_prep": "1-2 sentences: what to do Saturday evening — which proteins to marinate overnight, what to thaw. Be specific to this person's conditions and preferences.",
+      "prep_components": [
+        {"name": "Component name", "method": "Concise how-to — technique, temperature, time. Include any condition-specific notes inline.", "feeds": "Which days/meals this powers", "time": "X min"},
+        {"name": "...", "method": "...", "feeds": "...", "time": "X min"},
+        {"name": "...", "method": "...", "feeds": "...", "time": "X min"},
+        {"name": "...", "method": "...", "feeds": "...", "time": "X min"},
+        {"name": "...", "method": "...", "feeds": "...", "time": "X min"},
+        {"name": "...", "method": "...", "feeds": "...", "time": "X min"},
+        {"name": "...", "method": "...", "feeds": "...", "time": "X min"},
+        {"name": "...", "method": "...", "feeds": "...", "time": "X min"}
       ],
-      "daily_total": {"cal": 0, "protein": 0, "carbs": 0, "fat": 0}
+      "meals": [
+        {"slot":"Ritual","name":"...","desc":"...","time":"5 min","serves":1,"type":"ritual","ingredients":[["name","qty"]],"method":["Step."],"macros":{"cal":0,"protein":0,"carbs":0,"fat":0,"fiber":0},"note":"Morning ritual before the prep session begins"},
+        {"slot":"Breakfast","name":"...","desc":"...","time":"10 min","serves":1,"type":"breakfast","ingredients":[["name","qty"]],"method":["Step 1.","Step 2."],"macros":{"cal":0,"protein":0,"carbs":0,"fat":0,"fiber":0},"note":"Fuel for the prep session — protein and fat dominant"},
+        {"slot":"Lunch","name":"First taste of your foundation — assembled from the first components ready","desc":"...","time":"5 min","serves":1,"type":"lunch","ingredients":[["name","qty"]],"method":["Assemble from your prepped components as they come out of the oven/pot."],"macros":{"cal":0,"protein":0,"carbs":0,"fat":0,"fiber":0}},
+        {"slot":"Dinner","name":"...","desc":"...","time":"5 min","serves":1,"type":"dinner","ingredients":[["name","qty"]],"method":["Assemble from your prepped components."],"macros":{"cal":0,"protein":0,"carbs":0,"fat":0,"fiber":0}}
+      ],
+      "daily_total": {"cal":0,"protein":0,"carbs":0,"fat":0}
     },
-    "tuesday": { "theme": "...", "context": "...", "more_day": true, "meals": [], "daily_total": {"cal":0,"protein":0,"carbs":0,"fat":0} },
-    "wednesday": { "theme": "...", "context": "...", "more_day": true, "meals": [], "daily_total": {"cal":0,"protein":0,"carbs":0,"fat":0} },
-    "thursday": { "theme": "...", "context": "...", "more_day": true, "meals": [], "daily_total": {"cal":0,"protein":0,"carbs":0,"fat":0} },
-    "friday": { "theme": "...", "context": "...", "more_day": true, "meals": [], "daily_total": {"cal":0,"protein":0,"carbs":0,"fat":0} },
-    "saturday": { "theme": "...", "context": "Prep Day · MORE Rest Day 1 of 2", "more_day": false, "meals": [], "daily_total": {"cal":0,"protein":0,"carbs":0,"fat":0} },
-    "sunday": { "theme": "...", "context": "Rest & Restore · MORE Rest Day 2 of 2", "more_day": false, "meals": [], "daily_total": {"cal":0,"protein":0,"carbs":0,"fat":0} }
+    "monday": {
+      "theme": "...",
+      "context": "Assembly Day · MORE Day 1 of 5 · Under 10 min per meal",
+      "more_day": true,
+      "is_prep_day": false,
+      "meals": [
+        {"slot":"Ritual","name":"...","desc":"ingredient · ingredient","time":"5 min","serves":1,"type":"ritual","ingredients":[["name","qty"]],"method":["Step."],"macros":{"cal":0,"protein":0,"carbs":0,"fat":0,"fiber":0},"note":"optional medicinal note"},
+        {"slot":"Breakfast","name":"...","desc":"...","time":"5 min","serves":1,"type":"breakfast","ingredients":[["name","qty"]],"method":["Assemble from prepped components. Step 2."],"macros":{"cal":0,"protein":0,"carbs":0,"fat":0,"fiber":0}},
+        {"slot":"Lunch","name":"...","desc":"...","time":"5 min","serves":1,"type":"lunch","ingredients":[["name","qty"]],"method":["Assemble from prepped components. Add fresh element."],"macros":{"cal":0,"protein":0,"carbs":0,"fat":0,"fiber":0}},
+        {"slot":"Snack","name":"...","desc":"...","time":"2 min","serves":1,"type":"snack","ingredients":[["name","qty"]],"method":["Step."],"macros":{"cal":0,"protein":0,"carbs":0,"fat":0,"fiber":0}},
+        {"slot":"Dinner","name":"...","desc":"...","time":"10 min","serves":1,"type":"dinner","ingredients":[["name","qty"]],"method":["Assemble. Reheat gently. Add fermented pantry item alongside."],"macros":{"cal":0,"protein":0,"carbs":0,"fat":0,"fiber":0},"note":"optional note"}
+      ],
+      "daily_total": {"cal":0,"protein":0,"carbs":0,"fat":0}
+    },
+    "tuesday": {
+      "theme": "...", "context": "Assembly Day · MORE Day 2 of 5 · Under 10 min per meal",
+      "more_day": true, "is_prep_day": false,
+      "meals": [
+        {"slot":"Ritual","name":"...","desc":"...","time":"5 min","serves":1,"type":"ritual","ingredients":[["name","qty"]],"method":["Step."],"macros":{"cal":0,"protein":0,"carbs":0,"fat":0,"fiber":0}},
+        {"slot":"Breakfast","name":"...","desc":"...","time":"5 min","serves":1,"type":"breakfast","ingredients":[["name","qty"]],"method":["Assemble."],"macros":{"cal":0,"protein":0,"carbs":0,"fat":0,"fiber":0}},
+        {"slot":"Lunch","name":"...","desc":"...","time":"5 min","serves":1,"type":"lunch","ingredients":[["name","qty"]],"method":["Assemble."],"macros":{"cal":0,"protein":0,"carbs":0,"fat":0,"fiber":0}},
+        {"slot":"Snack","name":"...","desc":"...","time":"2 min","serves":1,"type":"snack","ingredients":[["name","qty"]],"method":["Step."],"macros":{"cal":0,"protein":0,"carbs":0,"fat":0,"fiber":0}},
+        {"slot":"Dinner","name":"...","desc":"...","time":"10 min","serves":1,"type":"dinner","ingredients":[["name","qty"]],"method":["Assemble."],"macros":{"cal":0,"protein":0,"carbs":0,"fat":0,"fiber":0}}
+      ],
+      "daily_total": {"cal":0,"protein":0,"carbs":0,"fat":0}
+    },
+    "wednesday": {
+      "theme": "...", "context": "Assembly Day · MORE Day 3 of 5 · Midweek Prep this evening",
+      "more_day": true, "is_prep_day": false,
+      "midweek_prep": "1-2 sentences: what to prep Wednesday evening (~1 hr) — which new proteins, grains, or vegetables to prepare to power Thursday through Saturday.",
+      "meals": [
+        {"slot":"Ritual","name":"...","desc":"...","time":"5 min","serves":1,"type":"ritual","ingredients":[["name","qty"]],"method":["Step."],"macros":{"cal":0,"protein":0,"carbs":0,"fat":0,"fiber":0}},
+        {"slot":"Breakfast","name":"...","desc":"...","time":"5 min","serves":1,"type":"breakfast","ingredients":[["name","qty"]],"method":["Assemble."],"macros":{"cal":0,"protein":0,"carbs":0,"fat":0,"fiber":0}},
+        {"slot":"Lunch","name":"...","desc":"...","time":"5 min","serves":1,"type":"lunch","ingredients":[["name","qty"]],"method":["Assemble."],"macros":{"cal":0,"protein":0,"carbs":0,"fat":0,"fiber":0}},
+        {"slot":"Snack","name":"...","desc":"...","time":"2 min","serves":1,"type":"snack","ingredients":[["name","qty"]],"method":["Step."],"macros":{"cal":0,"protein":0,"carbs":0,"fat":0,"fiber":0}},
+        {"slot":"Dinner","name":"...","desc":"...","time":"10 min","serves":1,"type":"dinner","ingredients":[["name","qty"]],"method":["Assemble from remaining Sunday components."],"macros":{"cal":0,"protein":0,"carbs":0,"fat":0,"fiber":0}}
+      ],
+      "daily_total": {"cal":0,"protein":0,"carbs":0,"fat":0}
+    },
+    "thursday": {
+      "theme": "...", "context": "Assembly Day · MORE Day 4 of 5 · Fresh Foundation",
+      "more_day": true, "is_prep_day": false,
+      "meals": [
+        {"slot":"Ritual","name":"...","desc":"...","time":"5 min","serves":1,"type":"ritual","ingredients":[["name","qty"]],"method":["Step."],"macros":{"cal":0,"protein":0,"carbs":0,"fat":0,"fiber":0}},
+        {"slot":"Breakfast","name":"...","desc":"...","time":"5 min","serves":1,"type":"breakfast","ingredients":[["name","qty"]],"method":["Assemble from midweek prep components."],"macros":{"cal":0,"protein":0,"carbs":0,"fat":0,"fiber":0}},
+        {"slot":"Lunch","name":"...","desc":"...","time":"5 min","serves":1,"type":"lunch","ingredients":[["name","qty"]],"method":["Assemble."],"macros":{"cal":0,"protein":0,"carbs":0,"fat":0,"fiber":0}},
+        {"slot":"Snack","name":"...","desc":"...","time":"2 min","serves":1,"type":"snack","ingredients":[["name","qty"]],"method":["Step."],"macros":{"cal":0,"protein":0,"carbs":0,"fat":0,"fiber":0}},
+        {"slot":"Dinner","name":"...","desc":"...","time":"10 min","serves":1,"type":"dinner","ingredients":[["name","qty"]],"method":["Assemble."],"macros":{"cal":0,"protein":0,"carbs":0,"fat":0,"fiber":0}}
+      ],
+      "daily_total": {"cal":0,"protein":0,"carbs":0,"fat":0}
+    },
+    "friday": {
+      "theme": "...", "context": "Assembly Day · MORE Day 5 of 5",
+      "more_day": true, "is_prep_day": false,
+      "meals": [
+        {"slot":"Ritual","name":"...","desc":"...","time":"5 min","serves":1,"type":"ritual","ingredients":[["name","qty"]],"method":["Step."],"macros":{"cal":0,"protein":0,"carbs":0,"fat":0,"fiber":0}},
+        {"slot":"Breakfast","name":"...","desc":"...","time":"5 min","serves":1,"type":"breakfast","ingredients":[["name","qty"]],"method":["Assemble."],"macros":{"cal":0,"protein":0,"carbs":0,"fat":0,"fiber":0}},
+        {"slot":"Lunch","name":"...","desc":"...","time":"5 min","serves":1,"type":"lunch","ingredients":[["name","qty"]],"method":["Assemble."],"macros":{"cal":0,"protein":0,"carbs":0,"fat":0,"fiber":0}},
+        {"slot":"Snack","name":"...","desc":"...","time":"2 min","serves":1,"type":"snack","ingredients":[["name","qty"]],"method":["Step."],"macros":{"cal":0,"protein":0,"carbs":0,"fat":0,"fiber":0}},
+        {"slot":"Dinner","name":"...","desc":"...","time":"10 min","serves":1,"type":"dinner","ingredients":[["name","qty"]],"method":["Assemble. Friday — one pleasure element encouraged."],"macros":{"cal":0,"protein":0,"carbs":0,"fat":0,"fiber":0},"note":"One genuine pleasure element is part of the protocol"}
+      ],
+      "daily_total": {"cal":0,"protein":0,"carbs":0,"fat":0}
+    },
+    "saturday": {
+      "theme": "...", "context": "Rest Day · MORE Rest Day · Saturday Prep Begins This Evening",
+      "more_day": false, "is_prep_day": false,
+      "meals": [
+        {"slot":"Ritual","name":"...","desc":"...","time":"5 min","serves":1,"type":"ritual","ingredients":[["name","qty"]],"method":["Step."],"macros":{"cal":0,"protein":0,"carbs":0,"fat":0,"fiber":0}},
+        {"slot":"Breakfast","name":"...","desc":"...","time":"10 min","serves":1,"type":"breakfast","ingredients":[["name","qty"]],"method":["Step 1.","Step 2."],"macros":{"cal":0,"protein":0,"carbs":0,"fat":0,"fiber":0},"note":"Saturday allows more time — one fresh cooked element is fine"},
+        {"slot":"Lunch","name":"...","desc":"...","time":"10 min","serves":1,"type":"lunch","ingredients":[["name","qty"]],"method":["Step."],"macros":{"cal":0,"protein":0,"carbs":0,"fat":0,"fiber":0}},
+        {"slot":"Snack","name":"...","desc":"...","time":"2 min","serves":1,"type":"snack","ingredients":[["name","qty"]],"method":["Step."],"macros":{"cal":0,"protein":0,"carbs":0,"fat":0,"fiber":0}},
+        {"slot":"Dinner","name":"...","desc":"...","time":"15 min","serves":1,"type":"dinner","ingredients":[["name","qty"]],"method":["Step 1.","Step 2."],"macros":{"cal":0,"protein":0,"carbs":0,"fat":0,"fiber":0},"note":"Saturday evening: marinate proteins overnight for Sunday prep"}
+      ],
+      "daily_total": {"cal":0,"protein":0,"carbs":0,"fat":0}
+    }
   },
   "shopping_list": {
     "produce": ["item with quantity for the week", "item with quantity"],
-    "proteins": ["item with quantity", "item with quantity"],
+    "proteins": ["item with quantity — specify grass-fed, wild-caught, pasture-raised where relevant"],
     "pantry": ["item", "item"],
     "herbs_adaptogens": ["item", "item"],
-    "ferments_condiments": ["item", "item"],
+    "ferments_condiments": ["item — note if from pantry stock or needs purchasing", "item"],
     "dairy_eggs": ["item with quantity", "item with quantity"]
   },
-  "meal_prep_note": "2-3 sentences: specific Sunday prep guidance for this person - what to make, in what order, and why it powers their week."
+  "sunday_prep_summary": "2-3 sentences summarising the Sunday prep session for this specific person — what the 8 components are, in what order to make them, and what that foundation powers for the week. This is the card that appears at the top of the Sunday view.",
+  "midweek_prep_summary": "1-2 sentences: what the Wednesday evening prep covers and why it's lighter than Sunday."
 }`;
 
   try {
@@ -1713,7 +1993,7 @@ Return ONLY a valid JSON object (no markdown, no backticks, no explanation) with
         <div style="text-align:center;max-width:480px">
           <div style="font-family:'Cormorant Garamond',serif;font-weight:700;font-size:36px;color:var(--terracotta);letter-spacing:0.1em;margin-bottom:32px">ALKA</div>
           <h2 style="color:var(--warm-white);font-size:28px;margin-bottom:16px">Almost there</h2>
-          <p style="color:rgba(255,255,255,0.6);font-size:15px;line-height:1.7">Something went wrong generating your blueprint. Please try again, or contact the ALKA team.<br><br>Error: ${err.message}</p>
+          <p style="color:rgba(255,255,255,0.6);font-size:15px;line-height:1.7">To generate your personalized blueprint, add your Anthropic API key to the fetch call in this file. This is a Stage 1 proof-of-concept.<br><br>Error: ${err.message}</p>
         </div>
       </div>`;
   }
@@ -1883,16 +2163,19 @@ function renderBlueprint(bp, userName, dateStr) {
 
   // Build dynamic week from AI data
   buildWeekHTML(bp);
+
+  // Initialise favorites count
+  updateFavCount();
 }
 
 // ── DYNAMIC MEAL PLAN DATA ────────────────────────────────────────────────────
 let DYNAMIC_MEAL_PLAN = {};
 let DYNAMIC_SHOPPING = {};
 
-const DAY_KEYS = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
-const DAY_SHORT = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-const DAY_IDS   = ['mon','tue','wed','thu','fri','sat','sun'];
-const DAY_FULL  = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+const DAY_KEYS = ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'];
+const DAY_SHORT = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+const DAY_IDS   = ['sun','mon','tue','wed','thu','fri','sat'];
+const DAY_FULL  = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 
 function buildWeekHTML(bp) {
   DYNAMIC_MEAL_PLAN = {};
@@ -1906,29 +2189,60 @@ function buildWeekHTML(bp) {
   let panelsHTML = '';
 
   DAY_KEYS.forEach((day, idx) => {
-    const d    = bp.meal_plan[day] || {};
-    const id   = DAY_IDS[idx];
-    const full = DAY_FULL[idx];
-    const short = DAY_SHORT[idx];
-    const theme = d.theme || '';
+    const d       = bp.meal_plan[day] || {};
+    const id      = DAY_IDS[idx];
+    const full    = DAY_FULL[idx];
+    const short   = DAY_SHORT[idx];
+    const theme   = d.theme || '';
     const context = d.context || '';
-    const meals = d.meals || [];
-    const total = d.daily_total || {};
+    const meals   = d.meals || [];
+    const total   = d.daily_total || {};
     const isFirst = idx === 0;
+    const isSunday = day === 'sunday';
+    const isWed    = day === 'wednesday';
 
-    // Store recipes for this day indexed by day_slotindex
+    // Store recipes
     meals.forEach((meal, mi) => {
-      const key = id + '_' + mi;
-      DYNAMIC_MEAL_PLAN[key] = meal;
+      DYNAMIC_MEAL_PLAN[id + '_' + mi] = meal;
     });
 
-    // Build tabs
-    tabsHTML += `<button class="day-tab${isFirst ? ' active' : ''}" onclick="switchDay('${id}',this)">
+    // Tab — Sunday gets a special prep badge
+    tabsHTML += `<button class="day-tab${isFirst ? ' active' : ''}${isSunday ? ' prep-tab' : ''}" onclick="switchDay('${id}',this)">
       <span class="tab-day">${short}</span>
-      <span class="tab-theme">${theme}</span>
+      <span class="tab-theme">${isSunday ? 'Prep' : theme}</span>
     </button>`;
 
-    // Build meal cards
+    // Sunday: show Saturday evening note + prep components + meals
+    let extraHTML = '';
+
+    if (isSunday) {
+      const satPrep  = d.saturday_prep || '';
+      const summary  = bp.sunday_prep_summary || '';
+      const comps    = d.prep_components || [];
+
+      const compCards = comps.map(c => `
+        <div class="prep-component-card">
+          <div class="prep-comp-header">
+            <span class="prep-comp-name">${c.name || ''}</span>
+            <span class="prep-comp-time">${c.time || ''}</span>
+          </div>
+          <div class="prep-comp-method">${c.method || ''}</div>
+          <div class="prep-comp-feeds">Powers: ${c.feeds || ''}</div>
+        </div>`).join('');
+
+      extraHTML = `
+        ${satPrep ? `<div class="prep-sat-note"><span class="prep-sat-label">Saturday evening (30 min)</span><p>${satPrep}</p></div>` : ''}
+        ${summary ? `<div class="prep-summary-card"><div class="prep-summary-label">Your Foundation Session — ~2 hours</div><p class="prep-summary-text">${summary}</p></div>` : ''}
+        ${comps.length ? `<div class="prep-components-label">What you're making Sunday</div><div class="prep-components-grid">${compCards}</div>` : ''}
+        <div class="prep-meals-label">Sunday Meals — assembled as components finish</div>`;
+    }
+
+    // Wednesday: show midweek prep note below meals
+    if (isWed && d.midweek_prep) {
+      extraHTML += `<div class="midweek-prep-card"><span class="midweek-prep-label">Wednesday Evening — Midweek Refresh (~1 hr)</span><p>${d.midweek_prep}</p></div>`;
+    }
+
+    // Meal cards
     let cardsHTML = '';
     meals.forEach((meal, mi) => {
       const key = id + '_' + mi;
@@ -1952,7 +2266,6 @@ function buildWeekHTML(bp) {
         </div>`;
     });
 
-    // Daily total
     const totalHTML = total.cal
       ? `<div class="day-total">Daily total: <strong>${total.cal.toLocaleString()} kcal</strong> · Protein <strong>${total.protein}g</strong> · Carbs <strong>${total.carbs}g</strong> · Fat <strong>${total.fat}g</strong></div>`
       : '';
@@ -1963,7 +2276,9 @@ function buildWeekHTML(bp) {
           <span class="day-panel-name">${full}</span>
           <span class="day-panel-context">${context}</span>
         </div>
+        ${extraHTML}
         <div class="meal-cards">${cardsHTML}</div>
+        ${!isSunday && isWed ? '' : ''}
         ${totalHTML}
       </div>`;
   });
@@ -1980,6 +2295,146 @@ function switchDay(day, btn) {
   if (panel) panel.classList.add('active');
 }
 
+// ── FAVORITES ────────────────────────────────────────────────────────────────
+const FAV_KEY = 'alka_favorites';
+
+function getFavorites() {
+  try { return JSON.parse(localStorage.getItem(FAV_KEY) || '{}'); } catch(e) { return {}; }
+}
+function saveFavorites(favs) {
+  localStorage.setItem(FAV_KEY, JSON.stringify(favs));
+  updateFavCount();
+}
+function isFavorite(key) { return !!getFavorites()[key]; }
+function toggleFavorite(key) {
+  const favs = getFavorites();
+  if (favs[key]) {
+    delete favs[key];
+  } else {
+    const r = DYNAMIC_MEAL_PLAN[key];
+    if (r) favs[key] = { key, name: r.name, slot: r.slot, recipe: r };
+  }
+  saveFavorites(favs);
+  // Update button state if modal is open
+  const btn = document.getElementById('favToggleBtn');
+  if (btn) {
+    btn.classList.toggle('saved', !!getFavorites()[key]);
+    btn.innerHTML = getFavorites()[key] ? '♥ &nbsp;Saved' : '♡ &nbsp;Save Recipe';
+  }
+}
+function updateFavCount() {
+  const count = Object.keys(getFavorites()).length;
+  const el = document.getElementById('favCount');
+  const btn = document.getElementById('favFloatBtn');
+  if (el) el.textContent = count;
+  if (btn) btn.classList.toggle('visible', count > 0);
+}
+function openFavPanel() {
+  const favs = getFavorites();
+  const keys = Object.keys(favs);
+  const body = document.getElementById('favBody');
+  if (!keys.length) {
+    body.innerHTML = '<div class="fav-empty"><div class="fav-empty-icon">♡</div>Save recipes you love while browsing your meal plan — they will appear here.</div>';
+  } else {
+    body.innerHTML = keys.map(k => {
+      const f = favs[k];
+      return `<div class="fav-item" onclick="openRecipeFromFav('${k}')">
+        <div>
+          <div class="fav-item-name">${f.name}</div>
+          <div class="fav-item-slot">${f.slot}</div>
+        </div>
+        <button class="fav-item-remove" onclick="event.stopPropagation();removeFav('${k}')" title="Remove">×</button>
+      </div>`;
+    }).join('');
+  }
+  document.getElementById('favOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function openRecipeFromFav(key) {
+  closeFavPanelBtn();
+  setTimeout(() => openRecipe(key), 200);
+}
+function removeFav(key) {
+  const favs = getFavorites();
+  delete favs[key];
+  saveFavorites(favs);
+  openFavPanel(); // refresh panel
+}
+function closeFavPanel(e) {
+  if (e.target === document.getElementById('favOverlay')) closeFavPanelBtn();
+}
+function closeFavPanelBtn() {
+  document.getElementById('favOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ── FULL RECIPE EXPANSION ─────────────────────────────────────────────────────
+let fullRecipeCache = {};
+
+async function expandFullRecipe(key) {
+  const r = DYNAMIC_MEAL_PLAN[key];
+  if (!r) return;
+  const expandEl = document.getElementById('rcFullExpanded_' + key);
+  if (!expandEl) return;
+
+  // Already loaded
+  if (fullRecipeCache[key]) {
+    expandEl.innerHTML = renderFullRecipeHTML(fullRecipeCache[key]);
+    return;
+  }
+
+  // Show loading
+  expandEl.innerHTML = `<div class="rc-full-loading">
+    <div class="rc-full-loading-dot"></div>
+    <div class="rc-full-loading-dot"></div>
+    <div class="rc-full-loading-dot"></div>
+    <span>Expanding recipe...</span>
+  </div>`;
+
+  try {
+    const prompt = `You are a culinary medicine chef. Expand this recipe into a full, rich version in the style of a thoughtful food writer.
+
+Recipe: ${r.name}
+Slot: ${r.slot}
+Current ingredients: ${JSON.stringify(r.ingredients)}
+Current method: ${JSON.stringify(r.method)}
+Culinary medicine note: ${r.note || 'none'}
+
+Return ONLY a valid JSON object (no markdown, no backticks) with:
+{
+  "story": "2-3 sentence intro about this dish — its origin, why it belongs in this person's plan, what makes it special",
+  "chef_tips": ["tip 1", "tip 2", "tip 3"],
+  "why_it_works": "2-3 sentences of culinary medicine explanation — specific mechanisms (SCFAs, gut lining, adaptogens, etc)",
+  "serving": "1-2 sentences on how to plate and serve it beautifully",
+  "variations": "1-2 sentences on easy swaps or seasonal variations"
+}`;
+
+    const res = await fetch('/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt })
+    });
+    const data = await res.json();
+    const text = data.content.map(c => c.text || '').join('').replace(/```json|```/g, '').trim();
+    const full = JSON.parse(text);
+    fullRecipeCache[key] = full;
+    expandEl.innerHTML = renderFullRecipeHTML(full);
+  } catch(err) {
+    expandEl.innerHTML = '<div class="rc-full-tip">Could not load full recipe detail. Please try again.</div>';
+  }
+}
+
+function renderFullRecipeHTML(full) {
+  return `<div class="rc-full-expanded">
+    ${full.story ? `<div class="rc-full-section"><div class="rc-full-section-title">About This Dish</div><div class="rc-full-text">${full.story}</div></div>` : ''}
+    ${full.why_it_works ? `<div class="rc-full-section"><div class="rc-full-section-title">Why It Works</div><div class="rc-full-text">${full.why_it_works}</div></div>` : ''}
+    ${full.chef_tips && full.chef_tips.length ? `<div class="rc-full-section"><div class="rc-full-section-title">Chef's Tips</div>${full.chef_tips.map(t => `<div class="rc-full-tip">${t}</div>`).join('')}</div>` : ''}
+    ${full.serving ? `<div class="rc-full-section"><div class="rc-full-section-title">Serving</div><div class="rc-full-text">${full.serving}</div></div>` : ''}
+    ${full.variations ? `<div class="rc-full-section"><div class="rc-full-section-title">Variations</div><div class="rc-full-text">${full.variations}</div></div>` : ''}
+  </div>`;
+}
+
+// ── RECIPE MODAL ──────────────────────────────────────────────────────────────
 function openRecipe(key) {
   const r = DYNAMIC_MEAL_PLAN[key];
   if (!r) return;
@@ -1988,8 +2443,9 @@ function openRecipe(key) {
   const hasMacros = r.macros && r.macros.cal > 0;
   const ingredients = r.ingredients || [];
   const method = r.method || [];
+  const alreadySaved = isFavorite(key);
 
-  const content = `
+  const html = `
     <div class="rc-header">
       <div class="rc-slot">${r.slot || ''}</div>
       <div class="rc-name">${r.name || ''}</div>
@@ -2016,8 +2472,15 @@ function openRecipe(key) {
       ${method.map((step, i) => `<div class="rc-step"><div class="rc-step-num">${String(i+1).padStart(2,'0')}</div><div class="rc-step-text">${step}</div></div>`).join('')}
     </div>` : ''}
     ${r.note ? `<div class="rc-note">${r.note}</div>` : ''}
+    ${!isPrep && !isRest ? `<div class="rc-actions">
+      <button class="rc-btn rc-btn-full" onclick="expandFullRecipe('${key}')">✦ &nbsp;Full Recipe</button>
+      <button class="rc-btn rc-btn-fav ${alreadySaved ? 'saved' : ''}" id="favToggleBtn" onclick="toggleFavorite('${key}')">
+        ${alreadySaved ? '♥ &nbsp;Saved' : '♡ &nbsp;Save Recipe'}
+      </button>
+    </div>
+    <div id="rcFullExpanded_${key}"></div>` : ''}
   `;
-  document.getElementById('recipeContent').innerHTML = content;
+  document.getElementById('recipeContent').innerHTML = html;
   document.getElementById('recipeOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
@@ -2083,6 +2546,8 @@ document.addEventListener('keydown', e => {
     closeRecipeBtn();
     const so = document.getElementById('shoppingOverlay');
     if (so) { so.classList.remove('open'); document.body.style.overflow = ''; }
+    const fo = document.getElementById('favOverlay');
+    if (fo) { fo.classList.remove('open'); document.body.style.overflow = ''; }
   }
 });
 
