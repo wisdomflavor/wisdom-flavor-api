@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Personal Nourishment Assessment — ALKA</title>
-<link href="https://api.fontshare.com/v2/css?f[]=chillax@300,400,500,600,700&f[]=synonym@300,400,500,600&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=chillax@300,400,500,600,700&f[]=synonym@300,400,500,600&f[]=antipol@300,400,500,600,700&display=swap" rel="stylesheet">
+
 <style>
   :root {
     --cream: #F5F0E8;
@@ -46,7 +46,7 @@
     z-index: 100;
   }
   .header-logo {
-    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-family: 'Antipol', sans-serif;
     font-weight: 700;
     font-size: 28px;
     color: var(--terracotta);
@@ -299,7 +299,7 @@
   }
   .loading-inner { max-width: 560px; width: 100%; text-align: center; position: relative; z-index: 1; }
   .loading-logo {
-    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-family: 'Antipol', sans-serif;
     font-weight: 700; font-size: 40px;
     color: var(--terracotta); letter-spacing: 0.12em;
     text-transform: uppercase; margin-bottom: 48px;
@@ -371,7 +371,7 @@
   .bp-orb-2 { width: 350px; height: 350px; background: rgba(212,168,83,0.07); bottom: 0; left: -100px; }
   .bp-cover-header { display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 2; }
   .bp-cover-logo {
-    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-family: 'Antipol', sans-serif;
     font-weight: 700; font-size: 32px;
     color: var(--terracotta); letter-spacing: 0.1em; text-transform: uppercase;
   }
@@ -2017,7 +2017,7 @@ Return ONLY a valid JSON object (no markdown, no backticks, no explanation) with
     document.getElementById('blueprintView').innerHTML = `
       <div style="min-height:100vh;background:var(--earth);display:flex;align-items:center;justify-content:center;padding:48px;font-family:'Chillax',sans-serif;">
         <div style="text-align:center;max-width:480px">
-          <div style="font-family:'Cormorant Garamond',serif;font-weight:700;font-size:36px;color:var(--terracotta);letter-spacing:0.1em;margin-bottom:32px">ALKA</div>
+          <div style="font-family:'Antipol', sans-serif;font-weight:700;font-size:36px;color:var(--terracotta);letter-spacing:0.1em;margin-bottom:32px">ALKA</div>
           <h2 style="color:var(--warm-white);font-size:28px;margin-bottom:16px">Almost there</h2>
           <p style="color:rgba(255,255,255,0.6);font-size:15px;line-height:1.7">To generate your personalized blueprint, add your Anthropic API key to the fetch call in this file. This is a Stage 1 proof-of-concept.<br><br>Error: ${err.message}</p>
         </div>
